@@ -6,15 +6,19 @@
   "scripts": {
     "start": "python3 -m http.server 8080",
     "dev": "python3 -m http.server 8081",
+    "dev:docker": "docker-compose up --build",
+    "dev:n8n": "docker-compose up -d postgres && sleep 10 && docker-compose up n8n",
+    "deploy:railway": "railway deploy",
     "test": "node test/automated-tests.js",
     "test:watch": "nodemon test/automated-tests.js",
     "lint": "eslint *.js --fix || echo 'ESLint not configured, skipping...'",
     "lint:check": "eslint *.js || echo 'ESLint not configured, skipping...'",
-    "build": "echo 'Build: Validating files...' && node -c script.js && node -c ai-assistant.js && node -c automation-testing.js && node -c backend-automation.js",
+    "build": "echo 'Build: Validating files...' && node -c script.js && node -c ai-assistant.js && node -c automation-testing.js && node -c backend-automation.js && node -c n8n-service-connector.js",
     "validate": "npm run lint:check && npm run build && npm test",
     "health-check": "node health-check.js",
     "backup": "node -e \"if(typeof backendManager !== 'undefined') backendManager.backupSystem.performBackup()\"",
-    "generate-docs": "node generate-docs.js"
+    "generate-docs": "node generate-docs.js",
+    "setup": "cp .env.example .env && echo 'Environment setup complete! Please configure your .env file.'"
   },
   "keywords": [
     "n8n",

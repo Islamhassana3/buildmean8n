@@ -1,0 +1,119 @@
+[build]
+builder = "nixpacks"
+
+[deploy]
+startCommand = "npm start"
+healthcheckPath = "/health"
+healthcheckTimeout = 300
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 3
+
+[[services]]
+name = "n8n-workflow-builder"
+icon = "🚀"
+
+[services.build]
+buildCommand = "npm run build"
+
+[services.deploy]
+startCommand = "npm start"
+numReplicas = 1
+
+[[services.envVars]]
+name = "NODE_ENV"
+value = "production"
+
+[[services.envVars]]
+name = "PORT"
+value = "8080"
+
+[[services.envVars]]
+name = "N8N_API_URL"
+value = "${{n8n.N8N_EDITOR_BASE_URL}}"
+
+[[services.envVars]]
+name = "DATABASE_URL"
+value = "${{postgres.DATABASE_URL}}"
+
+[[services]]
+name = "n8n"
+icon = "⚡"
+
+[services.build]
+dockerfilePath = "n8n.Dockerfile"
+
+[services.deploy]
+startCommand = "n8n start"
+numReplicas = 1
+
+[[services.envVars]]
+name = "DB_TYPE"
+value = "postgresdb"
+
+[[services.envVars]]
+name = "DB_POSTGRESDB_HOST"
+value = "${{postgres.PGHOST}}"
+
+[[services.envVars]]
+name = "DB_POSTGRESDB_PORT"
+value = "${{postgres.PGPORT}}"
+
+[[services.envVars]]
+name = "DB_POSTGRESDB_DATABASE"
+value = "${{postgres.PGDATABASE}}"
+
+[[services.envVars]]
+name = "DB_POSTGRESDB_USER"
+value = "${{postgres.PGUSER}}"
+
+[[services.envVars]]
+name = "DB_POSTGRESDB_PASSWORD"
+value = "${{postgres.PGPASSWORD}}"
+
+[[services.envVars]]
+name = "N8N_EDITOR_BASE_URL"
+value = "https://${{RAILWAY_PUBLIC_DOMAIN}}"
+
+[[services.envVars]]
+name = "WEBHOOK_URL"
+value = "https://${{RAILWAY_PUBLIC_DOMAIN}}"
+
+[[services.envVars]]
+name = "N8N_ENCRYPTION_KEY"
+generateValue = true
+
+[[services.envVars]]
+name = "EXECUTIONS_DATA_SAVE_ON_SUCCESS"
+value = "all"
+
+[[services.envVars]]
+name = "EXECUTIONS_DATA_SAVE_ON_ERROR"
+value = "all"
+
+[[services.envVars]]
+name = "N8N_METRICS"
+value = "true"
+
+[[services]]
+name = "postgres"
+icon = "🐘"
+
+[services.deploy]
+image = "postgres:15-alpine"
+numReplicas = 1
+
+[[services.envVars]]
+name = "POSTGRES_DB"
+value = "n8n"
+
+[[services.envVars]]
+name = "POSTGRES_USER"
+value = "n8n"
+
+[[services.envVars]]
+name = "POSTGRES_PASSWORD"
+generateValue = true
+
+[[services.volumes]]
+name = "postgres-data"
+mountPath = "/var/lib/postgresql/data"

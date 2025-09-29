@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-09-29T20:38:58.115Z",
+  "timestamp": "2025-09-29T22:14:37.891Z",
   "duration": 14,
   "summary": {
     "totalTests": 8,
@@ -45,16 +45,3 @@
       "status": "PASS"
     },
     {
-      "test": "Performance",
-      "passed": 6,
-      "failed": 0,
-      "status": "PASS"
-    },
-    {
-      "test": "Accessibility",
-      "passed": 2,
-      "failed": 2,
-      "status": "WARN"
-    }
-  ]
-}
