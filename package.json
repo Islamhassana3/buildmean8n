@@ -1,0 +1,19 @@
+{
+  "name": "buildmean8n",
+  "version": "1.0.0",
+  "description": "A natural language n8n workflow builder and editor",
+  "main": "index.html",
+  "scripts": {
+    "start": "python3 -m http.server 8080",
+    "test": "echo \"No tests yet\" && exit 0"
+  },
+  "keywords": [
+    "n8n",
+    "workflow",
+    "automation",
+    "natural-language",
+    "ai"
+  ],
+  "author": "",
+  "license": "MIT"
+}
