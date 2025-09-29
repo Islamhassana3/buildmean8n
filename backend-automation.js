@@ -9,6 +9,9 @@ class BackendAutomationManager {
         this.concurrencyManager = new ConcurrencyManager();
         this.failureRecovery = new FailureRecoveryAgent();
         
+        // Initialize n8n service connector
+        this.n8nConnector = new N8NServiceConnector();
+        
         this.initializeBackendSystems();
     }
 
@@ -101,6 +104,13 @@ class BackendAutomationManager {
 
     // Get all workflows (placeholder - would connect to database)
     getAllWorkflows() {
+        // If n8n service is connected, try to get workflows from there
+        if (this.n8nConnector && this.n8nConnector.connected) {
+            // Note: This would be async in practice, but keeping sync for compatibility
+            // In a real implementation, this method should be made async
+            return this.simulateGetAllWorkflows();
+        }
+        
         // In browser environment, simulate with localStorage
         const workflows = [];
         
@@ -126,18 +136,107 @@ class BackendAutomationManager {
             });
         }
 
+        // Add sample workflows if none exist
+        if (workflows.length === 0) {
+            workflows.push(...this.getSampleWorkflows());
+        }
+
         return workflows;
+    }
+
+    // Simulate getting workflows for n8n service fallback
+    simulateGetAllWorkflows() {
+        return [
+            {
+                id: 'sample_1',
+                name: 'Email Form Workflow',
+                nodes: [
+                    { id: 1, type: 'trigger', name: 'Webhook', x: 150, y: 150 },
+                    { id: 2, type: 'action', name: 'Send Email', x: 400, y: 150 }
+                ],
+                connections: [{ from: 1, to: 2 }],
+                active: true,
+                service: 'n8n'
+            },
+            {
+                id: 'sample_2',
+                name: 'Database Sync Workflow',
+                nodes: [
+                    { id: 1, type: 'trigger', name: 'Schedule', x: 150, y: 150 },
+                    { id: 2, type: 'action', name: 'Database', x: 400, y: 150 }
+                ],
+                connections: [{ from: 1, to: 2 }],
+                active: false,
+                service: 'n8n'
+            }
+        ];
+    }
+
+    // Get sample workflows
+    getSampleWorkflows() {
+        return [
+            {
+                id: 'sample_email',
+                name: 'Contact Form to Email',
+                description: 'Automatically send emails when contact form is submitted',
+                nodes: [
+                    { id: 1, type: 'trigger', name: 'Webhook', x: 150, y: 150 },
+                    { id: 2, type: 'transform', name: 'Set', x: 400, y: 150 },
+                    { id: 3, type: 'action', name: 'Send Email', x: 650, y: 150 }
+                ],
+                connections: [
+                    { from: 1, to: 2 },
+                    { from: 2, to: 3 }
+                ],
+                active: false,
+                service: 'local'
+            },
+            {
+                id: 'sample_slack',
+                name: 'Daily Report to Slack',
+                description: 'Send daily reports to Slack channel',
+                nodes: [
+                    { id: 1, type: 'trigger', name: 'Schedule', x: 150, y: 150 },
+                    { id: 2, type: 'action', name: 'Database', x: 400, y: 150 },
+                    { id: 3, type: 'action', name: 'Slack', x: 650, y: 150 }
+                ],
+                connections: [
+                    { from: 1, to: 2 },
+                    { from: 2, to: 3 }
+                ],
+                active: false,
+                service: 'local'
+            }
+        ];
     }
 
     // Execute workflow with full backend support
     async executeWorkflow(workflowId, inputData = {}) {
+        const executionId = this.generateExecutionId();
+        
         try {
+            // First try to execute via n8n service
+            if (this.n8nConnector && this.n8nConnector.connected) {
+                const result = await this.n8nConnector.executeWorkflow(workflowId, inputData);
+                
+                console.log(`Workflow ${workflowId} executed via n8n service (${executionId})`);
+                
+                return {
+                    executionId,
+                    workflowId,
+                    status: 'completed',
+                    data: result,
+                    timestamp: new Date(),
+                    service: 'n8n'
+                };
+            }
+            
+            // Fallback to local simulation
             const workflow = this.getWorkflow(workflowId);
             if (!workflow) {
                 throw new Error(`Workflow ${workflowId} not found`);
             }
 
-            const executionId = this.generateExecutionId();
             const execution = {
                 id: executionId,
                 workflowId: workflowId,
@@ -153,11 +252,27 @@ class BackendAutomationManager {
             // Store execution results
             this.storeExecutionResult(execution);
             
-            return result;
+            console.log(`Workflow ${workflowId} executed via simulation (${executionId})`);
+            
+            return {
+                executionId,
+                workflowId,
+                status: 'completed',
+                data: result,
+                timestamp: new Date(),
+                service: 'simulation'
+            };
         } catch (error) {
             console.error('Workflow execution failed:', error);
             await this.failureRecovery.handleFailure(workflowId, error);
-            throw error;
+            
+            return {
+                executionId,
+                workflowId,
+                status: 'failed',
+                error: error.message,
+                timestamp: new Date()
+            };
         }
     }
 

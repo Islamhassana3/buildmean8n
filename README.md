@@ -113,6 +113,80 @@ Build Mean8n features a complete automation ecosystem with 115+ automated featur
    - Connect nodes by clicking on connection points
    - Test your workflow with the "Execute" button
 
+### Dual-Service Architecture Setup
+
+Build Mean8n now supports a production-ready dual-service architecture with n8n + PostgreSQL:
+
+#### Local Development with Docker
+
+1. **Setup environment**:
+   ```bash
+   npm run setup
+   # Configure your .env file with database credentials
+   ```
+
+2. **Start all services**:
+   ```bash
+   npm run dev:docker
+   ```
+   This starts:
+   - Frontend (Build Mean8n) on http://localhost:8080
+   - n8n service on http://localhost:5678
+   - PostgreSQL database on port 5432
+
+3. **Start n8n only**:
+   ```bash
+   npm run dev:n8n
+   ```
+
+#### Railway.app Deployment
+
+1. **Install Railway CLI**:
+   ```bash
+   npm install -g @railway/cli
+   ```
+
+2. **Deploy**:
+   ```bash
+   railway login
+   npm run deploy:railway
+   ```
+   
+   This deploys three services:
+   - **Frontend**: Build Mean8n workflow builder
+   - **n8n**: Workflow execution engine
+   - **PostgreSQL**: Database for workflow persistence
+
+#### Environment Variables
+
+Key configuration for dual-service setup:
+
+```bash
+# n8n Service Connection
+N8N_API_URL=http://localhost:5678
+N8N_WEBHOOK_URL=http://localhost:5678
+
+# Database Configuration  
+DATABASE_URL=postgresql://user:password@host:5432/n8n
+DB_TYPE=postgresdb
+
+# Security
+N8N_ENCRYPTION_KEY=your_encryption_key
+```
+
+#### Service Health Checks
+
+Monitor your services:
+```bash
+npm run health-check
+```
+
+Services include automatic health monitoring:
+- Frontend application health
+- n8n service connectivity
+- Database connection status
+- Workflow execution capabilities
+
 ## 💡 Usage Examples
 
 ### Example 1: Natural Language

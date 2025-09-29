@@ -1,6 +1,6 @@
 {
-  "timestamp": "2025-09-29T20:39:05.546Z",
-  "healthPercentage": 90,
+  "timestamp": "2025-09-29T22:06:57.385Z",
+  "healthPercentage": 70,
   "summary": {
     "totalChecks": 10,
     "healthyChecks": 9,
@@ -44,38 +44,3 @@
       "issues": [],
       "details": "CSS file size: 14.5KB"
     },
-    {
-      "name": "Code Security",
-      "healthy": false,
-      "issues": [
-        "script.js: innerHTML usage (XSS risk)",
-        "script.js: Template literal injection risk",
-        "ai-assistant.js: innerHTML usage (XSS risk)",
-        "ai-assistant.js: Template literal injection risk",
-        "automation-testing.js: Template literal injection risk",
-        "backend-automation.js: Template literal injection risk"
-      ],
-      "details": "4 JavaScript files scanned"
-    },
-    {
-      "name": "Dependency Security",
-      "healthy": true,
-      "issues": [],
-      "details": "Dependency security checked"
-    },
-    {
-      "name": "Configuration Security",
-      "healthy": true,
-      "issues": [],
-      "details": "Configuration security checked"
-    },
-    {
-      "name": "Performance Health",
-      "healthy": true,
-      "issues": [
-        "Scripts not optimized with defer/async"
-      ],
-      "details": "Bundle size: 0.13MB"
-    }
-  ]
-}
