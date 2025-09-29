@@ -3,5 +3,38 @@ dist/
 .DS_Store
 *.log
 .env
+.env.local
+.env.production
 .vscode/
 .idea/
+
+# Docker
+.dockerignore
+
+# Railway
+.railway/
+
+# n8n data
+n8n-config/data/
+postgres-data/
+
+# Test outputs
+coverage/
+test-results/
+
+# Build artifacts
+build/
+tmp/
+
+# Package manager lock files
+package-lock.json
+yarn.lock
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Health reports
+health-report-*.json
