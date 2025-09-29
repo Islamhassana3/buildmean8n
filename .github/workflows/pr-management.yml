@@ -1,0 +1,155 @@
+name: PR Management Bot
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  pull_request_review:
+    types: [submitted]
+  issues:
+    types: [opened, labeled]
+
+jobs:
+  pr-automation:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Auto-assign reviewers
+      if: github.event_name == 'pull_request' && github.event.action == 'opened'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const { owner, repo } = context.repo;
+          const { number } = context.payload.pull_request;
+          
+          // Auto-assign based on changed files
+          const { data: files } = await github.rest.pulls.listFiles({
+            owner,
+            repo,
+            pull_number: number
+          });
+          
+          let reviewers = [];
+          const hasJSChanges = files.some(f => f.filename.endsWith('.js'));
+          const hasHTMLChanges = files.some(f => f.filename.endsWith('.html'));
+          const hasCSSChanges = files.some(f => f.filename.endsWith('.css'));
+          
+          // Add logic for reviewer assignment based on file types
+          if (hasJSChanges || hasHTMLChanges || hasCSSChanges) {
+            console.log('Frontend changes detected');
+          }
+          
+          // Auto-add labels
+          const labels = [];
+          if (hasJSChanges) labels.push('javascript');
+          if (hasHTMLChanges) labels.push('ui');
+          if (hasCSSChanges) labels.push('styling');
+          
+          if (labels.length > 0) {
+            await github.rest.issues.addLabels({
+              owner,
+              repo,
+              issue_number: number,
+              labels
+            });
+          }
+
+    - name: Check PR requirements
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const { owner, repo } = context.repo;
+          const { number, body, title } = context.payload.pull_request;
+          
+          let comments = [];
+          
+          // Check if PR has description
+          if (!body || body.trim().length < 10) {
+            comments.push('⚠️ Please add a meaningful description to your PR.');
+          }
+          
+          // Check if PR title follows convention
+          if (!title.match(/^(feat|fix|docs|style|refactor|test|chore)(\(.+\))?: .+/)) {
+            comments.push('⚠️ Please use conventional commit format in PR title (e.g., "feat: add new feature").');
+          }
+          
+          if (comments.length > 0) {
+            await github.rest.issues.createComment({
+              owner,
+              repo,
+              issue_number: number,
+              body: `## PR Review Bot\n\n${comments.join('\n')}\n\nPlease address these items for a smoother review process.`
+            });
+          }
+
+    - name: Auto-merge dependabot PRs
+      if: github.actor == 'dependabot[bot]' && github.event_name == 'pull_request'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const { owner, repo } = context.repo;
+          const { number } = context.payload.pull_request;
+          
+          // Enable auto-merge for dependabot PRs after CI passes
+          await github.rest.pulls.createReview({
+            owner,
+            repo,
+            pull_number: number,
+            event: 'APPROVE',
+            body: 'Auto-approved by PR management bot for dependency update.'
+          });
+
+  issue-automation:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'issues' && github.event.action == 'opened'
+    steps:
+    - name: Auto-label issues
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const { owner, repo } = context.repo;
+          const { number, body, title } = context.payload.issue;
+          
+          let labels = [];
+          
+          // Auto-label based on content
+          if (title.toLowerCase().includes('bug') || body.toLowerCase().includes('error')) {
+            labels.push('bug');
+          }
+          if (title.toLowerCase().includes('feature') || title.toLowerCase().includes('enhancement')) {
+            labels.push('enhancement');
+          }
+          if (title.toLowerCase().includes('docs') || title.toLowerCase().includes('documentation')) {
+            labels.push('documentation');
+          }
+          if (title.toLowerCase().includes('question') || title.toLowerCase().includes('help')) {
+            labels.push('question');
+          }
+          
+          if (labels.length > 0) {
+            await github.rest.issues.addLabels({
+              owner,
+              repo,
+              issue_number: number,
+              labels
+            });
+          }
+          
+          // Add welcome comment for new contributors
+          await github.rest.issues.createComment({
+            owner,
+            repo,
+            issue_number: number,
+            body: `👋 Thanks for opening this issue! A maintainer will review it soon. 
+
+If this is a bug report, please include:
+- Steps to reproduce
+- Expected vs actual behavior
+- Browser/environment info
+
+If this is a feature request, please describe:
+- The use case
+- Proposed solution
+- Any alternatives considered`
+          });

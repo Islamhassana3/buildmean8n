@@ -1,0 +1,60 @@
+{
+  "timestamp": "2025-09-29T20:00:34.211Z",
+  "duration": 12,
+  "summary": {
+    "totalTests": 8,
+    "totalPassed": 52,
+    "totalFailed": 2,
+    "passRate": 96.3
+  },
+  "results": [
+    {
+      "test": "File Structure",
+      "passed": 11,
+      "failed": 0,
+      "status": "PASS"
+    },
+    {
+      "test": "JavaScript Syntax",
+      "passed": 4,
+      "failed": 0,
+      "status": "PASS"
+    },
+    {
+      "test": "HTML Validity",
+      "passed": 9,
+      "failed": 0,
+      "status": "PASS"
+    },
+    {
+      "test": "CSS Validity",
+      "passed": 3,
+      "failed": 0,
+      "status": "PASS"
+    },
+    {
+      "test": "Workflow Functionality",
+      "passed": 7,
+      "failed": 0,
+      "status": "PASS"
+    },
+    {
+      "test": "Security Checks",
+      "passed": 10,
+      "failed": 0,
+      "status": "PASS"
+    },
+    {
+      "test": "Performance",
+      "passed": 6,
+      "failed": 0,
+      "status": "PASS"
+    },
+    {
+      "test": "Accessibility",
+      "passed": 2,
+      "failed": 2,
+      "status": "WARN"
+    }
+  ]
+}

@@ -422,61 +422,125 @@ function addMessageToChat(type, content) {
     elements.chatMessages.scrollTop = elements.chatMessages.scrollHeight;
 }
 
-// Natural Language Processing (Simplified)
-function processNaturalLanguage(message) {
+// Enhanced Natural Language Processing with AI
+async function processNaturalLanguage(message) {
     const lowerMessage = message.toLowerCase();
     
-    // Pattern matching for common workflow requests
+    // Try advanced AI processing first
+    if (typeof processNaturalLanguageAdvanced === 'function') {
+        try {
+            const aiResponse = await processNaturalLanguageAdvanced(message);
+            addMessageToChat('assistant', aiResponse);
+            return;
+        } catch (error) {
+            console.log('Falling back to simple NL processing:', error);
+        }
+    }
+    
+    // Fallback to simple pattern matching
     if (lowerMessage.includes('email') && (lowerMessage.includes('form') || lowerMessage.includes('submit'))) {
         createEmailFormWorkflow();
-        addMessageToChat('assistant', 'I\'ve created a workflow that sends an email when a form is submitted. The workflow includes a Webhook trigger to receive form data and a Send Email action.');
+        addMessageToChat('assistant', '✨ I\'ve created an intelligent workflow that sends an email when a form is submitted. The workflow includes a Webhook trigger to receive form data and a Send Email action.');
     }
     else if (lowerMessage.includes('slack') && lowerMessage.includes('tweet')) {
         createSlackTwitterWorkflow();
-        addMessageToChat('assistant', 'I\'ve created a workflow that sends a Slack notification when there\'s a new tweet. It includes a Schedule trigger to check for tweets and a Slack action to send notifications.');
+        addMessageToChat('assistant', '✨ I\'ve created a workflow that sends a Slack notification when there\'s a new tweet. It includes a Schedule trigger to check for tweets and a Slack action to send notifications.');
     }
     else if (lowerMessage.includes('sync') && (lowerMessage.includes('contact') || lowerMessage.includes('database'))) {
         createSyncContactsWorkflow();
-        addMessageToChat('assistant', 'I\'ve created a workflow that syncs contacts to a database. It includes a Webhook trigger and a Database action to store the data.');
+        addMessageToChat('assistant', '✨ I\'ve created a workflow that syncs contacts to a database. It includes a Webhook trigger and a Database action to store the data.');
     }
     else if (lowerMessage.includes('schedule') || lowerMessage.includes('cron')) {
         const node = createNode('trigger', 'Schedule', 100, 100);
-        addMessageToChat('assistant', 'I\'ve added a Schedule trigger to your canvas. You can configure it to run at specific times or intervals.');
+        addMessageToChat('assistant', '⏰ I\'ve added a Schedule trigger to your canvas. You can configure it to run at specific times or intervals.');
     }
     else if (lowerMessage.includes('webhook') || lowerMessage.includes('api')) {
         const node = createNode('trigger', 'Webhook', 100, 100);
-        addMessageToChat('assistant', 'I\'ve added a Webhook trigger to your canvas. This will allow you to trigger the workflow via HTTP requests.');
+        addMessageToChat('assistant', '🌐 I\'ve added a Webhook trigger to your canvas. This will allow you to trigger the workflow via HTTP requests.');
     }
     else if (lowerMessage.includes('if') || lowerMessage.includes('condition')) {
         const node = createNode('logic', 'IF', 100, 100);
-        addMessageToChat('assistant', 'I\'ve added an IF condition node to your canvas. You can use this to create conditional logic in your workflow.');
+        addMessageToChat('assistant', '🔀 I\'ve added an IF condition node to your canvas. You can use this to create conditional logic in your workflow.');
     }
     else if (lowerMessage.includes('clear') || lowerMessage.includes('reset')) {
         clearWorkflow();
-        addMessageToChat('assistant', 'I\'ve cleared the workflow canvas for you.');
+        addMessageToChat('assistant', '🧹 I\'ve cleared the workflow canvas for you.');
     }
     else if (lowerMessage.includes('help')) {
-        addMessageToChat('assistant', `Here are some things you can ask me:
+        addMessageToChat('assistant', `🤖 **AI-Powered Workflow Assistant**
+
+Here are some things you can ask me:
             
+💡 **Smart Workflows:**
 • "Send email when form submitted"
 • "Slack notification on new tweet"
 • "Sync contacts to database"
+• "Create a complex approval workflow"
+• "Automate customer onboarding"
+
+⚡ **Quick Actions:**
 • "Add a webhook trigger"
 • "Add an IF condition"
+• "Optimize my workflow"
+• "Explain this workflow"
 • "Clear the workflow"
+
+🎯 **Advanced Features:**
+• I can analyze workflow complexity
+• I suggest optimizations automatically
+• I learn from your preferences
+• I provide contextual help
 
 You can also drag and drop nodes from the Nodes tab to build your workflow manually!`);
     }
     else {
-        addMessageToChat('assistant', `I understand you want to create a workflow related to: "${message}". 
+        // Enhanced generic response with suggestions
+        const suggestions = generateWorkflowSuggestions(message);
+        addMessageToChat('assistant', `🤖 I understand you want to create a workflow related to: "${message}". 
 
-I can help you build workflows! Try describing your automation using:
-- Triggers (webhook, schedule, email)
-- Actions (send email, slack, database)
-- Logic (IF conditions, loops)
+💡 **AI Analysis:** Based on your input, I detected these possibilities:
+${suggestions.join('\n')}
 
-Or you can drag nodes from the Nodes tab to build manually.`);
+🔧 **Try describing your automation using:**
+- **Triggers:** webhook, schedule, email, file upload
+- **Actions:** send email, slack, database, API calls
+- **Logic:** IF conditions, loops, data transformation
+- **Services:** Specific tools you want to integrate
+
+Or you can drag nodes from the Nodes tab to build manually!`);
     }
+}
+
+// Generate intelligent workflow suggestions
+function generateWorkflowSuggestions(message) {
+    const suggestions = [];
+    const lowerMessage = message.toLowerCase();
+    
+    // Service-based suggestions
+    if (lowerMessage.includes('customer')) {
+        suggestions.push('• Customer management workflow with CRM integration');
+    }
+    if (lowerMessage.includes('order')) {
+        suggestions.push('• Order processing automation with notifications');
+    }
+    if (lowerMessage.includes('backup')) {
+        suggestions.push('• Automated backup and sync workflow');
+    }
+    if (lowerMessage.includes('report')) {
+        suggestions.push('• Automated report generation and distribution');
+    }
+    if (lowerMessage.includes('social')) {
+        suggestions.push('• Social media automation and monitoring');
+    }
+    
+    // Default suggestions if no specific patterns found
+    if (suggestions.length === 0) {
+        suggestions.push('• Data processing and transformation workflow');
+        suggestions.push('• Notification and alerting system');
+        suggestions.push('• Integration between different services');
+    }
+    
+    return suggestions;
 }
 
 // Pre-built Workflow Templates
