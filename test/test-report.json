@@ -45,16 +45,3 @@
       "status": "PASS"
     },
     {
-      "test": "Performance",
-      "passed": 6,
-      "failed": 0,
-      "status": "PASS"
-    },
-    {
-      "test": "Accessibility",
-      "passed": 2,
-      "failed": 2,
-      "status": "WARN"
-    }
-  ]
-}

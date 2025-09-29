@@ -3,8 +3,8 @@
   "healthPercentage": 70,
   "summary": {
     "totalChecks": 10,
-    "healthyChecks": 7,
-    "criticalIssues": 3,
+    "healthyChecks": 9,
+    "criticalIssues": 1,
     "warnings": 1
   },
   "checks": [
@@ -16,10 +16,8 @@
     },
     {
       "name": "Dependencies",
-      "healthy": false,
-      "issues": [
-        "node_modules directory missing - run npm install"
-      ],
+      "healthy": true,
+      "issues": [],
       "details": "Package.json valid, 11 scripts defined"
     },
     {
@@ -46,40 +44,3 @@
       "issues": [],
       "details": "CSS file size: 14.5KB"
     },
-    {
-      "name": "Code Security",
-      "healthy": false,
-      "issues": [
-        "script.js: innerHTML usage (XSS risk)",
-        "script.js: Template literal injection risk",
-        "ai-assistant.js: innerHTML usage (XSS risk)",
-        "ai-assistant.js: Template literal injection risk",
-        "automation-testing.js: Template literal injection risk",
-        "backend-automation.js: Template literal injection risk"
-      ],
-      "details": "4 JavaScript files scanned"
-    },
-    {
-      "name": "Dependency Security",
-      "healthy": false,
-      "issues": [
-        "No lock file found - dependency versions not locked"
-      ],
-      "details": "Dependency security checked"
-    },
-    {
-      "name": "Configuration Security",
-      "healthy": true,
-      "issues": [],
-      "details": "Configuration security checked"
-    },
-    {
-      "name": "Performance Health",
-      "healthy": true,
-      "issues": [
-        "Scripts not optimized with defer/async"
-      ],
-      "details": "Bundle size: 0.13MB"
-    }
-  ]
-}
