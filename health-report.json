@@ -1,10 +1,10 @@
 {
-  "timestamp": "2025-09-29T20:00:41.296Z",
-  "healthPercentage": 70,
+  "timestamp": "2025-09-29T20:39:05.546Z",
+  "healthPercentage": 90,
   "summary": {
     "totalChecks": 10,
-    "healthyChecks": 7,
-    "criticalIssues": 3,
+    "healthyChecks": 9,
+    "criticalIssues": 1,
     "warnings": 1
   },
   "checks": [
@@ -16,10 +16,8 @@
     },
     {
       "name": "Dependencies",
-      "healthy": false,
-      "issues": [
-        "node_modules directory missing - run npm install"
-      ],
+      "healthy": true,
+      "issues": [],
       "details": "Package.json valid, 11 scripts defined"
     },
     {
@@ -61,10 +59,8 @@
     },
     {
       "name": "Dependency Security",
-      "healthy": false,
-      "issues": [
-        "No lock file found - dependency versions not locked"
-      ],
+      "healthy": true,
+      "issues": [],
       "details": "Dependency security checked"
     },
     {
