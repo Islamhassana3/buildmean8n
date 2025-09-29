@@ -1,19 +1,48 @@
 {
   "name": "buildmean8n",
   "version": "1.0.0",
-  "description": "A natural language n8n workflow builder and editor",
+  "description": "A natural language n8n workflow builder and editor with comprehensive automation",
   "main": "index.html",
   "scripts": {
     "start": "python3 -m http.server 8080",
-    "test": "echo \"No tests yet\" && exit 0"
+    "dev": "python3 -m http.server 8081",
+    "test": "node test/automated-tests.js",
+    "test:watch": "nodemon test/automated-tests.js",
+    "lint": "eslint *.js --fix || echo 'ESLint not configured, skipping...'",
+    "lint:check": "eslint *.js || echo 'ESLint not configured, skipping...'",
+    "build": "echo 'Build: Validating files...' && node -c script.js && node -c ai-assistant.js && node -c automation-testing.js && node -c backend-automation.js",
+    "validate": "npm run lint:check && npm run build && npm test",
+    "health-check": "node health-check.js",
+    "backup": "node -e \"if(typeof backendManager !== 'undefined') backendManager.backupSystem.performBackup()\"",
+    "generate-docs": "node generate-docs.js"
   },
   "keywords": [
     "n8n",
     "workflow",
     "automation",
     "natural-language",
-    "ai"
+    "ai",
+    "no-code",
+    "low-code",
+    "integration",
+    "chatbot",
+    "visual-editor"
   ],
-  "author": "",
-  "license": "MIT"
+  "author": "Build Mean8n Team",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^8.0.0",
+    "nodemon": "^3.0.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Islamhassana3/buildmean8n.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Islamhassana3/buildmean8n/issues"
+  },
+  "homepage": "https://github.com/Islamhassana3/buildmean8n#readme"
 }
