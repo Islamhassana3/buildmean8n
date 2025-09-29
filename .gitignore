@@ -36,5 +36,8 @@ pids/
 *.seed
 *.pid.lock
 
-# Health reports
+# Health reports and auto-generated files
+health-report.json
 health-report-*.json
+test/test-report.json
+test/test-report-*.json
