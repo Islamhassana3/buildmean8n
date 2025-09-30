@@ -1,4 +1,4 @@
-FROM node:18-alpine
+FROM node:22-alpine
 
 # Install Python for npm start script compatibility
 RUN apk add --no-cache python3 py3-pip
@@ -10,7 +10,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm ci --only=production
+RUN HUSKY=0 npm ci --omit=dev
 
 # Copy application files
 COPY . .

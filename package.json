@@ -23,13 +23,13 @@
     "build:ui": "npm run build --workspace @buildmean8n/ui",
     "build:api": "npm run build --workspace @buildmean8n/api",
     "build:web": "npm run build --workspace @buildmean8n/web",
-    "lint": "eslint \"{apps,packages}/**/*.{ts,tsx}\"",
+  "lint": "eslint --no-error-on-unmatched-pattern \"{apps,packages}/**/*.{ts,tsx}\"",
     "format": "prettier --write \"{apps,packages}/**/*.{ts,tsx,js,jsx,json,css,md}\"",
     "typecheck": "tsc -b",
     "test": "npm-run-all --parallel test:api test:web",
     "test:api": "npm run test --workspace @buildmean8n/api",
     "test:web": "npm run test --workspace @buildmean8n/web",
-    "prepare": "husky install"
+    "prepare": "node ./tools/scripts/prepare-husky.mjs"
   },
   "keywords": [
     "n8n",
@@ -48,7 +48,7 @@
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.29.1",
-  "eslint-import-resolver-typescript": "^3.6.1",
+    "eslint-import-resolver-typescript": "^3.6.1",
     "eslint-plugin-jsx-a11y": "^6.8.0",
     "eslint-plugin-react": "^7.34.4",
     "eslint-plugin-react-hooks": "^4.6.0",
