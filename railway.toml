@@ -25,7 +25,7 @@ value = "production"
 
 [[services.envVars]]
 name = "PORT"
-value = "8080"
+value = "3000"
 
 [[services.envVars]]
 name = "N8N_API_URL"

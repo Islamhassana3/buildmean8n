@@ -4,7 +4,7 @@
   "description": "A natural language n8n workflow builder and editor with comprehensive automation",
   "main": "index.html",
   "scripts": {
-    "start": "python3 -m http.server 8080",
+    "start": "node server.js",
     "dev": "python3 -m http.server 8081",
     "dev:docker": "docker-compose up --build",
     "dev:n8n": "docker-compose up -d postgres && sleep 10 && docker-compose up n8n",
@@ -37,6 +37,9 @@
   "devDependencies": {
     "eslint": "^8.0.0",
     "nodemon": "^3.0.0"
+  },
+  "dependencies": {
+    "express": "^4.18.0"
   },
   "engines": {
     "node": ">=16.0.0"
