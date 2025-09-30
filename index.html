@@ -6,6 +6,7 @@
     <title>Build Mean8n - Natural Language Workflow Builder</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.js"></script>
+    <script src="WorkflowNode.vue" type="module"></script>
     <script src="ai-assistant.js"></script>
     <script src="automation-testing.js"></script>
     <script src="n8n-service-connector.js"></script>
@@ -204,7 +205,19 @@
                 </div>
                 <div class="canvas-container" id="canvasContainer">
                     <svg id="connectionsSvg" class="connections-layer"></svg>
-                    <div class="canvas-grid" id="canvas"></div>
+                    <div class="canvas-grid" id="canvas">
+                        <workflow-node
+                            v-for="node in nodes"
+                            :key="node.id"
+                            :node="node"
+                            :selected="selectedNodeId === node.id"
+                            @node-selected="onNodeSelected"
+                            @drag-start="onDragStart"
+                            @connection-start="onConnectionStart"
+                            @configure-node="onConfigureNode"
+                            @delete-node="onDeleteNode"
+                        ></workflow-node>
+                    </div>
                 </div>
             </main>
 

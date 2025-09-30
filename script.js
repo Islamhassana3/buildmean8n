@@ -27,6 +27,144 @@ const elements = {
     canvasInfo: document.getElementById('canvasInfo')
 };
 
+// Vue App for Canvas
+const canvasApp = Vue.createApp({
+    data() {
+        return {
+            nodes: state.nodes,
+            selectedNodeId: null
+        };
+    },
+    methods: {
+        onNodeSelected(node) {
+            this.selectedNodeId = node.id;
+            state.selectedNode = node;
+        },
+        onDragStart(data) {
+            state.draggedNode = data.node;
+            state.dragOffset = data.offset;
+        },
+        onConnectionStart(data) {
+            startConnection(data.nodeId, data.pointType);
+        },
+        onConfigureNode(node) {
+            configureNode(node.id);
+        },
+        onDeleteNode(node) {
+            deleteNode(node.id);
+        }
+    },
+    mounted() {
+        // Watch for changes in global state
+        this.$watch(() => state.nodes, (newNodes) => {
+            this.nodes = newNodes;
+        }, { deep: true });
+    }
+});
+
+// Register the WorkflowNode component (inline for simplicity)
+canvasApp.component('workflow-node', {
+    template: `
+        <div
+            :class="['workflow-node', node.type, { selected: selected }]"
+            :id="'node-' + node.id"
+            :style="{ left: node.x + 'px', top: node.y + 'px' }"
+            @mousedown="handleMouseDown"
+        >
+            <div
+                v-for="point in connectionPoints"
+                :key="point.id"
+                :class="['connection-point', point.type]"
+                :data-node-id="node.id"
+                :data-point-type="point.type"
+                @mousedown.stop="startConnection(point.type)"
+            ></div>
+            <div class="node-header">
+                <div class="node-icon">{{ nodeIcon }}</div>
+                <div class="node-title">{{ node.name }}</div>
+            </div>
+            <div class="node-description">{{ nodeDescription }}</div>
+            <div class="node-controls">
+                <button @click="configureNode">⚙️</button>
+                <button @click="deleteNode">🗑️</button>
+            </div>
+        </div>
+    `,
+    props: ['node', 'selected'],
+    emits: ['node-selected', 'drag-start', 'connection-start', 'configure-node', 'delete-node'],
+    computed: {
+        nodeIcon() {
+            const icons = {
+                'Webhook': '🌐',
+                'Schedule': '⏰',
+                'Email': '📧',
+                'HTTP Request': '🔗',
+                'Send Email': '✉️',
+                'Slack': '💬',
+                'Database': '🗄️',
+                'IF': '🔀',
+                'Switch': '🔢',
+                'Loop': '🔄',
+                'Set': '📝',
+                'Code': '💻',
+                'Function': '⚡'
+            };
+            return icons[this.node.name] || '📦';
+        },
+        nodeDescription() {
+            const descriptions = {
+                'trigger': 'Triggers workflow execution',
+                'action': 'Performs an action',
+                'logic': 'Controls workflow flow',
+                'transform': 'Transforms data'
+            };
+            return descriptions[this.node.type] || 'Workflow node';
+        },
+        connectionPoints() {
+            const points = [];
+            if (this.node.type !== 'trigger') {
+                points.push({ id: 'input', type: 'input' });
+            }
+            points.push({ id: 'output', type: 'output' });
+            return points;
+        }
+    },
+    methods: {
+        handleMouseDown(e) {
+            if (e.target.classList.contains('workflow-node') ||
+                e.target.classList.contains('node-header') ||
+                e.target.classList.contains('node-title')) {
+                this.$emit('node-selected', this.node);
+                this.startDrag(e);
+            }
+        },
+        startDrag(e) {
+            this.$emit('drag-start', {
+                node: this.node,
+                offset: {
+                    x: e.clientX - this.node.x,
+                    y: e.clientY - this.node.y
+                }
+            });
+        },
+        startConnection(pointType) {
+            this.$emit('connection-start', {
+                nodeId: this.node.id,
+                pointType
+            });
+        },
+        configureNode() {
+            this.$emit('configure-node', this.node);
+        },
+        deleteNode() {
+            this.$emit('delete-node', this.node);
+        }
+    }
+});
+
+// Mount Vue app on canvas
+canvasApp.mount('#canvas');
+
 // Initialize Application
 function init() {
     setupEventListeners();
@@ -146,76 +284,20 @@ function createNode(type, name, x, y) {
     };
     
     state.nodes.push(node);
-    renderNode(node);
     updateCanvasInfo();
     
     return node;
 }
 
-// Node Rendering
-function renderNode(node) {
-    const nodeEl = document.createElement('div');
-    nodeEl.className = `workflow-node ${node.type}`;
-    nodeEl.id = `node-${node.id}`;
-    nodeEl.style.left = `${node.x}px`;
-    nodeEl.style.top = `${node.y}px`;
-    
-    const icon = getNodeIcon(node.name);
-    
-    // Determine connection points based on type
-    let inputPoints = '';
-    let outputPoints = '';
-    
-    if (node.type === 'trigger') {
-        // Triggers have no inputs, one output
-        outputPoints = '<div class="connection-point output" data-node-id="' + node.id + '" data-point-type="output"></div>';
-    } else if (node.type === 'logic') {
-        // Logic nodes have inputs and outputs
-        inputPoints = '<div class="connection-point input top" data-node-id="' + node.id + '" data-point-type="input"></div>';
-        outputPoints = '<div class="connection-point output bottom" data-node-id="' + node.id + '" data-point-type="output"></div>';
-    } else {
-        // Actions and transforms have one input, one output
-        inputPoints = '<div class="connection-point input" data-node-id="' + node.id + '" data-point-type="input"></div>';
-        outputPoints = '<div class="connection-point output" data-node-id="' + node.id + '" data-point-type="output"></div>';
-    }
-    
-    nodeEl.innerHTML = `
-        ${inputPoints}
-        <div class="node-header">
-            <div class="node-icon">${icon}</div>
-            <div class="node-title">${node.name}</div>
-        </div>
-        <div class="node-description">${getNodeDescription(node.type, node.name)}</div>
-        <div class="node-controls">
-            <button onclick="configureNode(${node.id})">⚙️</button>
-            <button onclick="deleteNode(${node.id})">🗑️</button>
-        </div>
-        ${outputPoints}
-    `;
-    
-    // Make node draggable
-    nodeEl.addEventListener('mousedown', (e) => {
-        if (e.target.classList.contains('workflow-node') || e.target.classList.contains('node-header') || e.target.classList.contains('node-title')) {
-            state.selectedNode = node;
-            state.draggedNode = node;
-            state.dragOffset = {
-                x: e.clientX - node.x,
-                y: e.clientY - node.y
-            };
-            nodeEl.classList.add('selected');
-        }
-    });
-    
-    // Connection points
-    const connectionPoints = nodeEl.querySelectorAll('.connection-point');
-    connectionPoints.forEach(point => {
-        point.addEventListener('mousedown', (e) => {
-            e.stopPropagation();
-            startConnection(node.id, point.dataset.pointType);
-        });
-    });
-    
-    elements.canvas.appendChild(nodeEl);
+// Get Node Description
+function getNodeDescription(type, name) {
+    const descriptions = {
+        'trigger': 'Triggers workflow execution',
+        'action': 'Performs an action',
+        'logic': 'Controls workflow flow',
+        'transform': 'Transforms data'
+    };
+    return descriptions[type] || 'Workflow node';
 }
 
 // Get Node Icon
@@ -269,16 +351,8 @@ function handleCanvasMouseDown(e) {
 function handleCanvasMouseMove(e) {
     if (state.draggedNode) {
         const rect = elements.canvas.getBoundingClientRect();
-        state.draggedNode.x = e.clientX - rect.left - state.dragOffset.x;
-        state.draggedNode.y = e.clientY - rect.top - state.dragOffset.y;
-        
-        const nodeEl = document.getElementById(`node-${state.draggedNode.id}`);
-        if (nodeEl) {
-            nodeEl.style.left = `${state.draggedNode.x}px`;
-            nodeEl.style.top = `${state.draggedNode.y}px`;
-        }
-        
-        updateConnections();
+        state.draggedNode.x = (e.clientX - rect.left - state.dragOffset.x) / state.zoom - state.panOffset.x;
+        state.draggedNode.y = (e.clientY - rect.top - state.dragOffset.y) / state.zoom - state.panOffset.y;
     } else if (state.isPanning) {
         const deltaX = e.clientX - state.panStart.x;
         const deltaY = e.clientY - state.panStart.y;
@@ -290,15 +364,11 @@ function handleCanvasMouseMove(e) {
 }
 
 function handleCanvasMouseUp(e) {
+    if (state.draggedNode) {
+        updateConnections();
+    }
     state.draggedNode = null;
     state.isPanning = false;
-    
-    // Remove selection from all nodes
-    document.querySelectorAll('.workflow-node').forEach(node => {
-        if (node.id !== `node-${state.selectedNode?.id}`) {
-            node.classList.remove('selected');
-        }
-    });
 }
 
 function handleCanvasWheel(e) {
