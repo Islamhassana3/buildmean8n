@@ -6,8 +6,9 @@ RUN apk add --no-cache python3 py3-pip
 # Set working directory
 WORKDIR /app
 
-# Copy package files
+# Copy package files and any install-time scripts
 COPY package*.json ./
+COPY tools ./tools
 
 # Install dependencies
 RUN HUSKY=0 npm ci --omit=dev
