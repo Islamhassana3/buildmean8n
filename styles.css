@@ -360,20 +360,37 @@ body {
   width: 100%;
   height: 100%;
   position: relative;
+  overflow: auto;
 }
 
 .n8n-canvas {
-  width: 100%;
-  height: 100%;
+  width: 2000px;
+  height: 2000px;
   background-color: var(--n8n-bg-primary);
   background-image:
     radial-gradient(circle, var(--n8n-border) 1px, transparent 1px);
   background-size: 20px 20px;
   cursor: grab;
+  position: relative;
+  transform-origin: 0 0;
 }
 
 .n8n-canvas:active {
   cursor: grabbing;
+}
+
+/* Workflow Nodes Container */
+.workflow-nodes {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.workflow-nodes > * {
+  pointer-events: auto;
 }
 
 /* Canvas Controls */
@@ -446,7 +463,7 @@ body {
   max-width: 300px;
 }
 
-/* Properties Panel (Right Sidebar) */
+/* Properties Panel */
 .n8n-properties-panel {
   width: 320px;
   background-color: var(--n8n-bg-primary);
@@ -454,6 +471,11 @@ body {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  box-shadow: var(--n8n-shadow);
+}
+
+.n8n-properties-panel.hidden {
+  display: none;
 }
 
 .n8n-properties-header {
@@ -512,6 +534,62 @@ body {
 .n8n-properties-empty p {
   font-size: var(--n8n-font-sm);
   margin: 0;
+}
+
+/* Node Properties */
+.node-properties {
+  display: flex;
+  flex-direction: column;
+  gap: var(--n8n-space-6);
+}
+
+.property-section h4 {
+  font-size: var(--n8n-font-lg);
+  font-weight: var(--n8n-font-semibold);
+  color: var(--n8n-text-primary);
+  margin: 0 0 var(--n8n-space-4) 0;
+}
+
+.property-group {
+  margin-bottom: var(--n8n-space-4);
+}
+
+.property-group label {
+  display: block;
+  font-size: var(--n8n-font-sm);
+  font-weight: var(--n8n-font-medium);
+  color: var(--n8n-text-primary);
+  margin-bottom: var(--n8n-space-2);
+}
+
+.property-group input,
+.property-group textarea {
+  width: 100%;
+  padding: var(--n8n-space-2) var(--n8n-space-3);
+  border: 1px solid var(--n8n-border);
+  border-radius: var(--n8n-radius);
+  font-size: var(--n8n-font-sm);
+  background-color: var(--n8n-bg-primary);
+  color: var(--n8n-text-primary);
+  transition: border-color 0.15s ease;
+}
+
+.property-group input:focus,
+.property-group textarea:focus {
+  outline: none;
+  border-color: var(--n8n-primary);
+}
+
+.property-group textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.property-actions {
+  display: flex;
+  gap: var(--n8n-space-3);
+  padding-top: var(--n8n-space-4);
+  border-top: 1px solid var(--n8n-border);
 }
 
 /* Workflow Nodes */
@@ -611,46 +689,61 @@ body {
 /* Connection Points */
 .connection-point {
   position: absolute;
-  width: 12px;
-  height: 12px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
   background-color: var(--n8n-bg-primary);
-  border: 2px solid var(--n8n-border);
+  border: 3px solid var(--n8n-border);
   cursor: crosshair;
   transition: all 0.15s ease;
+  z-index: 10;
 }
 
 .connection-point:hover {
   border-color: var(--n8n-primary);
   transform: scale(1.2);
+  box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.1);
+}
+
+.connection-point.connecting {
+  border-color: var(--n8n-primary);
+  background-color: var(--n8n-primary);
+  transform: scale(1.3);
+  box-shadow: 0 0 0 6px rgba(255, 107, 53, 0.2);
 }
 
 .connection-point.input {
-  left: -6px;
+  left: -8px;
   top: 50%;
   transform: translateY(-50%);
 }
 
 .connection-point.output {
-  right: -6px;
+  right: -8px;
   top: 50%;
   transform: translateY(-50%);
 }
 
-/* Connections */
-.workflow-connection {
+/* Connections SVG */
+.connections-svg {
   position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   pointer-events: none;
   z-index: 1;
 }
 
-.workflow-connection path {
+.connection-line {
   stroke: var(--n8n-border-hover);
   stroke-width: 2;
   fill: none;
+  pointer-events: auto;
+  cursor: pointer;
 }
 
-.workflow-connection.selected path {
+.connection-line:hover {
   stroke: var(--n8n-primary);
   stroke-width: 3;
 }

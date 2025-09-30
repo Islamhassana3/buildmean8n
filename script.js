@@ -39,6 +39,7 @@ const canvasApp = Vue.createApp({
         onNodeSelected(node) {
             this.selectedNodeId = node.id;
             state.selectedNode = node;
+            showPropertiesPanel(node);
         },
         onDragStart(data) {
             state.draggedNode = data.node;
@@ -153,6 +154,7 @@ canvasApp.component('workflow-node', {
             });
         },
         startConnection(pointType) {
+            // Emit to parent to handle connection start
             this.$emit('connection-start', {
                 nodeId: this.node.id,
                 pointType
@@ -168,7 +170,7 @@ canvasApp.component('workflow-node', {
 });
 
 // Mount Vue app on canvas
-canvasApp.mount('#canvas');
+canvasApp.mount('#workflow-nodes');
 
 // Initialize Application
 function init() {
@@ -185,6 +187,11 @@ function setupEventListeners() {
     document.getElementById('clearWorkflow').addEventListener('click', clearWorkflow);
     document.getElementById('saveWorkflow').addEventListener('click', saveWorkflow);
     document.getElementById('executeWorkflow').addEventListener('click', executeWorkflow);
+    
+    // Properties panel
+    document.getElementById('closeProperties').addEventListener('click', () => {
+        document.getElementById('propertiesPanel').classList.add('hidden');
+    });
     
     // Chat
     elements.sendMessage.addEventListener('click', sendChatMessage);
@@ -222,6 +229,9 @@ function setupEventListeners() {
     // Node search
     document.getElementById('nodeSearch').addEventListener('input', handleNodeSearch);
     
+    // Connection point clicks (delegate to canvas)
+    elements.canvas.addEventListener('click', handleConnectionPointClick);
+    
     // Keyboard shortcuts
     document.addEventListener('keydown', handleKeyboardShortcuts);
 }
@@ -243,6 +253,21 @@ function setupTabSwitching() {
             document.getElementById(`${tabName}Tab`).classList.add('active');
         });
     });
+}
+
+function handleConnectionPointClick(e) {
+    const connectionPoint = e.target.closest('.connection-point');
+    if (connectionPoint) {
+        e.stopPropagation();
+        const nodeId = parseInt(connectionPoint.getAttribute('data-node-id'));
+        const pointType = connectionPoint.getAttribute('data-point-type');
+        
+        if (state.isConnecting) {
+            completeConnection(nodeId, pointType);
+        } else {
+            startConnection(nodeId, pointType);
+        }
+    }
 }
 
 // Keyboard Shortcuts
@@ -281,6 +306,21 @@ function handleKeyboardShortcuts(e) {
     }
 }
 
+function handleConnectionPointClick(e) {
+    const connectionPoint = e.target.closest('.connection-point');
+    if (connectionPoint) {
+        e.stopPropagation();
+        const nodeId = parseInt(connectionPoint.getAttribute('data-node-id'));
+        const pointType = connectionPoint.getAttribute('data-point-type');
+        
+        if (state.isConnecting) {
+            completeConnection(nodeId, pointType);
+        } else {
+            startConnection(nodeId, pointType);
+        }
+    }
+}
+
 // Workflow Management Functions
 function saveWorkflow() {
     const workflowData = {
@@ -298,6 +338,49 @@ function saveWorkflow() {
     
     // Show save notification
     showNotification('Workflow saved successfully!', 'success');
+}
+
+function executeWorkflow() {
+    if (state.nodes.length === 0) {
+        showNotification('No nodes to execute', 'warning');
+        return;
+    }
+    
+    // Show execution panel
+    const testPanel = document.getElementById('testPanel');
+    testPanel.classList.remove('hidden');
+    
+    // Simulate workflow execution
+    const resultsDiv = document.getElementById('testResults');
+    resultsDiv.innerHTML = '<p>Executing workflow...</p>';
+    
+    // Mock execution with delays
+    setTimeout(() => {
+        resultsDiv.innerHTML = '<p>🔍 Analyzing workflow structure...</p>';
+        
+        setTimeout(() => {
+            resultsDiv.innerHTML = '<p>⚡ Executing nodes in order...</p>';
+            
+            // Execute nodes in topological order (simplified)
+            const executedNodes = [];
+            state.nodes.forEach((node, index) => {
+                setTimeout(() => {
+                    executedNodes.push(node.name);
+                    resultsDiv.innerHTML = `
+                        <p>✅ Executed: ${executedNodes.join(' → ')}</p>
+                        <p>📊 Results: ${Math.floor(Math.random() * 100)} records processed</p>
+                    `;
+                    
+                    if (index === state.nodes.length - 1) {
+                        setTimeout(() => {
+                            resultsDiv.innerHTML += '<p>🎉 Workflow execution completed successfully!</p>';
+                            showNotification('Workflow executed successfully', 'success');
+                        }, 500);
+                    }
+                }, (index + 1) * 1000);
+            });
+        }, 1000);
+    }, 500);
 }
 
 function deleteNode(nodeId) {
@@ -337,20 +420,76 @@ function clearWorkflow() {
     showNotification('Workflow cleared', 'info');
 }
 
-function showNotification(message, type = 'info') {
-    // Create notification element
-    const notification = document.createElement('div');
-    notification.className = `notification ${type}`;
-    notification.textContent = message;
+function showPropertiesPanel(node) {
+    const panel = document.getElementById('propertiesPanel');
+    const content = document.getElementById('propertiesContent');
     
-    // Add to page
-    document.body.appendChild(notification);
+    // Show panel
+    panel.classList.remove('hidden');
     
-    // Auto remove after 3 seconds
-    setTimeout(() => {
-        notification.remove();
-    }, 3000);
+    // Generate properties content
+    content.innerHTML = `
+        <div class="node-properties">
+            <div class="property-section">
+                <h4>${node.name}</h4>
+                <div class="property-group">
+                    <label for="nodeName">Name</label>
+                    <input type="text" id="nodeName" value="${node.name}" />
+                </div>
+                <div class="property-group">
+                    <label for="nodeDescription">Description</label>
+                    <textarea id="nodeDescription">${node.config.description || ''}</textarea>
+                </div>
+                <div class="property-group">
+                    <label for="nodeEnabled">Enabled</label>
+                    <input type="checkbox" id="nodeEnabled" ${node.config.enabled !== false ? 'checked' : ''} />
+                </div>
+            </div>
+            <div class="property-actions">
+                <button class="n8n-btn n8n-btn-secondary" onclick="saveNodeProperties()">Save</button>
+                <button class="n8n-btn n8n-btn-secondary" onclick="duplicateNode(${node.id})">Duplicate</button>
+            </div>
+        </div>
+    `;
+    
+    `;
+    
+    // Add event listeners
+    document.getElementById('nodeName').addEventListener('input', (e) => {
+        node.name = e.target.value;
+        updateCanvasInfo();
+    });
+    
+    document.getElementById('nodeDescription').addEventListener('input', (e) => {
+        node.config.description = e.target.value;
+    });
+    
+    document.getElementById('nodeEnabled').addEventListener('change', (e) => {
+        node.config.enabled = e.target.checked;
+    });
 }
+
+function saveNodeProperties() {
+    showNotification('Node properties saved', 'success');
+}
+
+function duplicateNode(nodeId) {
+    const originalNode = state.nodes.find(n => n.id === nodeId);
+    if (originalNode) {
+        const duplicatedNode = {
+            ...originalNode,
+            id: state.nodeIdCounter++,
+            x: originalNode.x + 50,
+            y: originalNode.y + 50,
+            name: `${originalNode.name} Copy`
+        };
+        state.nodes.push(duplicatedNode);
+        updateCanvasInfo();
+        showNotification('Node duplicated', 'success');
+    }
+}
+
+function showNotification(message, type = 'info') {
 
 // Drag and Drop Setup
 function setupDragAndDrop() {
@@ -426,9 +565,35 @@ function handleCanvasMouseDown(e) {
 
 function handleCanvasMouseMove(e) {
     if (state.draggedNode) {
-        const rect = elements.canvas.getBoundingClientRect();
-        state.draggedNode.x = (e.clientX - rect.left - state.dragOffset.x) / state.zoom - state.panOffset.x;
-        state.draggedNode.y = (e.clientY - rect.top - state.dragOffset.y) / state.zoom - state.panOffset.y;
+        const rect = elements.canvasContainer.getBoundingClientRect();
+        const canvasRect = elements.canvas.getBoundingClientRect();
+        
+        // Calculate new position
+        let newX = (e.clientX - rect.left - state.dragOffset.x) / state.zoom;
+        let newY = (e.clientY - rect.top - state.dragOffset.y) / state.zoom;
+        
+        // Auto-scroll when near edges
+        const scrollThreshold = 50;
+        const scrollSpeed = 10;
+        
+        if (e.clientX - rect.left < scrollThreshold) {
+            elements.canvasContainer.scrollLeft -= scrollSpeed;
+        } else if (rect.right - e.clientX < scrollThreshold) {
+            elements.canvasContainer.scrollLeft += scrollSpeed;
+        }
+        
+        if (e.clientY - rect.top < scrollThreshold) {
+            elements.canvasContainer.scrollTop -= scrollSpeed;
+        } else if (rect.bottom - e.clientY < scrollThreshold) {
+            elements.canvasContainer.scrollTop += scrollSpeed;
+        }
+        
+        // Update node position
+        state.draggedNode.x = newX;
+        state.draggedNode.y = newY;
+        
+        // Update connections in real-time
+        updateConnections();
     } else if (state.isPanning) {
         const deltaX = e.clientX - state.panStart.x;
         const deltaY = e.clientY - state.panStart.y;
@@ -457,24 +622,58 @@ function handleCanvasWheel(e) {
 function startConnection(nodeId, pointType) {
     state.isConnecting = true;
     state.connectionStart = { nodeId, pointType };
+    
+    // Add visual feedback to all connection points
+    document.querySelectorAll('.connection-point').forEach(point => {
+        const pointNodeId = parseInt(point.getAttribute('data-node-id'));
+        const pointTypeAttr = point.getAttribute('data-point-type');
+        
+        // Highlight valid connection targets
+        if (pointNodeId !== nodeId && pointTypeAttr !== pointType) {
+            point.classList.add('connecting');
+        }
+    });
+    
+    showNotification('Click on another node to create connection', 'info');
 }
 
 function completeConnection(nodeId, pointType) {
     if (state.isConnecting && state.connectionStart) {
-        if (state.connectionStart.nodeId !== nodeId && 
-            state.connectionStart.pointType !== pointType) {
-            
-            const connection = {
-                from: state.connectionStart.pointType === 'output' ? state.connectionStart.nodeId : nodeId,
-                to: state.connectionStart.pointType === 'output' ? nodeId : state.connectionStart.nodeId
-            };
-            
+        // Prevent connecting to the same node
+        if (state.connectionStart.nodeId === nodeId) {
+            state.isConnecting = false;
+            state.connectionStart = null;
+            // Remove visual feedback
+            document.querySelectorAll('.connection-point.connecting').forEach(point => {
+                point.classList.remove('connecting');
+            });
+            return;
+        }
+
+        // Create connection based on point types
+        const connection = {
+            from: state.connectionStart.pointType === 'output' ? state.connectionStart.nodeId : nodeId,
+            to: state.connectionStart.pointType === 'output' ? nodeId : state.connectionStart.nodeId
+        };
+
+        // Check if connection already exists
+        const existingConnection = state.connections.find(conn =>
+            conn.from === connection.from && conn.to === connection.to
+        );
+
+        if (!existingConnection) {
             state.connections.push(connection);
             updateConnections();
+            showNotification('Connection created', 'success');
         }
-        
+
         state.isConnecting = false;
         state.connectionStart = null;
+        
+        // Remove visual feedback
+        document.querySelectorAll('.connection-point.connecting').forEach(point => {
+            point.classList.remove('connecting');
+        });
     }
 }
 

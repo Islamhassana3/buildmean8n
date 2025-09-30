@@ -261,8 +261,32 @@
 
             <!-- Main Canvas Area -->
             <main class="n8n-canvas-area">
-                <div class="n8n-canvas-container">
-                    <canvas id="workflowCanvas" class="n8n-canvas"></canvas>
+                <div class="n8n-canvas-container" id="canvasContainer">
+                    <div id="canvas" class="n8n-canvas">
+                        <!-- SVG for connections -->
+                        <svg id="connectionsSvg" class="connections-svg" width="100%" height="100%">
+                            <defs>
+                                <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                    <polygon points="0 0, 10 3.5, 0 7" fill="var(--n8n-primary)" />
+                                </marker>
+                            </defs>
+                        </svg>
+
+                        <!-- Vue workflow nodes will be mounted here -->
+                        <div id="workflow-nodes" class="workflow-nodes">
+                            <workflow-node
+                                v-for="node in nodes"
+                                :key="node.id"
+                                :node="node"
+                                :selected="selectedNodeId === node.id"
+                                @node-selected="onNodeSelected"
+                                @drag-start="onDragStart"
+                                @connection-start="onConnectionStart"
+                                @configure-node="onConfigureNode"
+                                @delete-node="onDeleteNode"
+                            ></workflow-node>
+                        </div>
+                    </div>
 
                     <!-- Canvas Controls -->
                     <div class="n8n-canvas-controls">
@@ -297,6 +321,26 @@
                     </div>
                 </div>
             </main>
+
+            <!-- Properties Panel (Right Sidebar) -->
+            <aside class="n8n-properties-panel" id="propertiesPanel">
+                <div class="n8n-properties-header">
+                    <h3>Properties</h3>
+                    <button class="n8n-properties-close" id="closeProperties">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="n8n-properties-content" id="propertiesContent">
+                    <div class="n8n-properties-empty">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor" opacity="0.3">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                        <p>Select a node to view its properties</p>
+                    </div>
+                </div>
+            </aside>
 
             <!-- Right Panel - Node Configuration -->
             <aside class="n8n-properties-panel" id="propertiesPanel">
