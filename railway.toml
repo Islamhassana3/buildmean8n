@@ -12,9 +12,6 @@ restartPolicyMaxRetries = 3
 name = "n8n-workflow-builder"
 icon = "🚀"
 
-[services.build]
-buildCommand = "npm run build"
-
 [services.deploy]
 startCommand = "npm start"
 numReplicas = 1
