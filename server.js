@@ -1,4 +1,5 @@
 console.log('Starting server...');
+// Force Railway redeploy - SVG icons update
 const express = require('express');
 const path = require('path');
 
