@@ -1,31 +1,31 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
-    --primary-color: #6366F1;
-    --primary-dark: #4F46E5;
-    --primary-light: #A5B4FC;
-    --secondary-color: #F59E0B;
-    --accent-color: #10B981;
-    --background: #F8FAFC;
-    --surface: #FFFFFF;
-    --surface-hover: #F1F5F9;
-    --surface-elevated: #FFFFFF;
-    --border: #E2E8F0;
-    --border-light: #F1F5F9;
-    --text-primary: #0F172A;
-    --text-secondary: #475569;
-    --text-tertiary: #94A3B8;
-    --success: #10B981;
-    --warning: #F59E0B;
-    --error: #EF4444;
-    --gradient-primary: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
-    --gradient-secondary: linear-gradient(135deg, #F59E0B 0%, #F97316 100%);
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    --shadow-glow: 0 0 0 1px rgba(99, 102, 241, 0.05), 0 1px 3px 0 rgba(99, 102, 241, 0.1);
+    --primary-color: #FF6B35;
+    --primary-dark: #E55A2B;
+    --primary-light: #FFA07A;
+    --secondary-color: #4A90E2;
+    --accent-color: #50E3C2;
+    --background: #1a1a1a;
+    --surface: #2a2a2a;
+    --surface-hover: #3a3a3a;
+    --surface-elevated: #333333;
+    --border: #404040;
+    --border-light: #555555;
+    --text-primary: #ffffff;
+    --text-secondary: #cccccc;
+    --text-tertiary: #888888;
+    --success: #50E3C2;
+    --warning: #F5A623;
+    --error: #FF6B35;
+    --gradient-primary: linear-gradient(135deg, #FF6B35 0%, #FF8C42 100%);
+    --gradient-secondary: linear-gradient(135deg, #4A90E2 0%, #7B68EE 100%);
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.4), 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
+    --shadow-glow: 0 0 0 1px rgba(255, 107, 53, 0.1), 0 1px 3px 0 rgba(255, 107, 53, 0.2);
     --blur-backdrop: blur(12px);
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-fast: all 0.15s ease-out;
@@ -43,7 +43,7 @@ body {
         sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background: linear-gradient(135deg, var(--background) 0%, #EEF2FF 100%);
+    background: var(--background);
     color: var(--text-primary);
     overflow: hidden;
     font-feature-settings: 'kern' 1, 'liga' 1;
@@ -588,7 +588,6 @@ button:hover::before {
     letter-spacing: 0.1em;
     padding: 0 0.5rem;
 }
-}
 
 .node-list {
     display: flex;
@@ -976,11 +975,6 @@ button:hover::before {
     text-align: center;
     padding: 3rem 1rem;
     font-style: italic;
-}
-
-
-    overflow-y: auto;
-    padding: 1rem;
 }
 
 .test-section {
