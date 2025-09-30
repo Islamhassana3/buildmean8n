@@ -73,6 +73,7 @@ function setupEventListeners() {
     elements.canvas.addEventListener('mousedown', handleCanvasMouseDown);
     elements.canvas.addEventListener('mousemove', handleCanvasMouseMove);
     elements.canvas.addEventListener('mouseup', handleCanvasMouseUp);
+    elements.canvas.addEventListener('wheel', handleCanvasWheel);
     
     // Node search
     document.getElementById('nodeSearch').addEventListener('input', handleNodeSearch);
@@ -161,7 +162,25 @@ function renderNode(node) {
     
     const icon = getNodeIcon(node.name);
     
+    // Determine connection points based on type
+    let inputPoints = '';
+    let outputPoints = '';
+    
+    if (node.type === 'trigger') {
+        // Triggers have no inputs, one output
+        outputPoints = '<div class="connection-point output" data-node-id="' + node.id + '" data-point-type="output"></div>';
+    } else if (node.type === 'logic') {
+        // Logic nodes have inputs and outputs
+        inputPoints = '<div class="connection-point input top" data-node-id="' + node.id + '" data-point-type="input"></div>';
+        outputPoints = '<div class="connection-point output bottom" data-node-id="' + node.id + '" data-point-type="output"></div>';
+    } else {
+        // Actions and transforms have one input, one output
+        inputPoints = '<div class="connection-point input" data-node-id="' + node.id + '" data-point-type="input"></div>';
+        outputPoints = '<div class="connection-point output" data-node-id="' + node.id + '" data-point-type="output"></div>';
+    }
+    
     nodeEl.innerHTML = `
+        ${inputPoints}
         <div class="node-header">
             <div class="node-icon">${icon}</div>
             <div class="node-title">${node.name}</div>
@@ -171,8 +190,7 @@ function renderNode(node) {
             <button onclick="configureNode(${node.id})">⚙️</button>
             <button onclick="deleteNode(${node.id})">🗑️</button>
         </div>
-        <div class="connection-point input" data-node-id="${node.id}" data-point-type="input"></div>
-        <div class="connection-point output" data-node-id="${node.id}" data-point-type="output"></div>
+        ${outputPoints}
     `;
     
     // Make node draggable
@@ -261,6 +279,13 @@ function handleCanvasMouseMove(e) {
         }
         
         updateConnections();
+    } else if (state.isPanning) {
+        const deltaX = e.clientX - state.panStart.x;
+        const deltaY = e.clientY - state.panStart.y;
+        state.panOffset.x += deltaX;
+        state.panOffset.y += deltaY;
+        elements.canvas.style.transform = `translate(${state.panOffset.x}px, ${state.panOffset.y}px) scale(${state.zoom})`;
+        state.panStart = { x: e.clientX, y: e.clientY };
     }
 }
 
@@ -274,6 +299,12 @@ function handleCanvasMouseUp(e) {
             node.classList.remove('selected');
         }
     });
+}
+
+function handleCanvasWheel(e) {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? -0.1 : 0.1;
+    adjustZoom(delta);
 }
 
 // Connection Management
@@ -377,14 +408,15 @@ window.deleteNode = function(nodeId) {
 // Zoom Controls
 function adjustZoom(delta) {
     state.zoom = Math.max(0.5, Math.min(2, state.zoom + delta));
-    elements.canvas.style.transform = `scale(${state.zoom})`;
+    elements.canvas.style.transform = `translate(${state.panOffset.x}px, ${state.panOffset.y}px) scale(${state.zoom})`;
     elements.zoomLevel.textContent = `${Math.round(state.zoom * 100)}%`;
     updateConnections();
 }
 
 function fitView() {
     state.zoom = 1;
-    elements.canvas.style.transform = `scale(${state.zoom})`;
+    state.panOffset = { x: 0, y: 0 };
+    elements.canvas.style.transform = `translate(${state.panOffset.x}px, ${state.panOffset.y}px) scale(${state.zoom})`;
     elements.zoomLevel.textContent = '100%';
     updateConnections();
 }
