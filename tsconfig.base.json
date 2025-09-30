@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "ES2021",
+    "module": "ESNext",
+    "moduleResolution": "NodeNext",
+    "lib": ["ES2021", "DOM"],
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": ".",
+    "paths": {
+      "@buildmean8n/core": ["packages/core/src/index.ts"],
+      "@buildmean8n/workflows": ["packages/workflows/src/index.ts"],
+      "@buildmean8n/nodes": ["packages/nodes/src/index.ts"],
+      "@buildmean8n/ui": ["packages/ui/src/index.ts"]
+    }
+  }
+}

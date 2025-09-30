@@ -2,6 +2,8 @@
 
 A powerful, intuitive workflow builder and editor with natural language capabilities, inspired by n8n. Build automation workflows using drag-and-drop or simply describe what you want in plain English!
 
+> **Repository status (Sep 2025):** The project is currently migrating into a TypeScript-first npm workspace. Daily Git workflows—branching, committing, and pushing—still work exactly the same. See [`docs/CONTRIBUTOR_GUIDE.md`](docs/CONTRIBUTOR_GUIDE.md) for up-to-date contributor instructions while the new `apps/*` and `packages/*` scaffolds land.
+
 ## 🌟 Features
 
 #
