@@ -623,9 +623,15 @@ button:hover::before {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.25rem;
-    background-color: var(--background);
+    background-color: var(--surface);
     border-radius: 0.375rem;
+    border: 1px solid var(--border);
+}
+
+.node-icon img {
+    width: 1.25rem;
+    height: 1.25rem;
+    filter: brightness(0) invert(1); /* Make icons white */
 }
 
 .node-item span {
@@ -766,15 +772,21 @@ button:hover::before {
 }
 
 .node-header .node-icon {
-    font-size: 1.5rem;
     width: 2.5rem;
     height: 2.5rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--gradient-primary);
+    background: var(--surface);
     border-radius: 0.625rem;
     box-shadow: var(--shadow-sm);
+    border: 2px solid var(--border);
+}
+
+.node-header .node-icon img {
+    width: 1.5rem;
+    height: 1.5rem;
+    filter: brightness(0) invert(1); /* Make icons white */
 }
 
 .node-title {
@@ -1175,4 +1187,48 @@ button:hover::before {
 .connection-line.error {
     stroke: var(--error);
     stroke-width: 3;
+}
+
+/* Notification Styles */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    border-radius: 8px;
+    color: white;
+    font-weight: 500;
+    font-size: 14px;
+    z-index: 1000;
+    box-shadow: var(--shadow-lg);
+    animation: slideIn 0.3s ease-out;
+    max-width: 300px;
+    word-wrap: break-word;
+}
+
+.notification.success {
+    background: var(--success);
+}
+
+.notification.error {
+    background: var(--error);
+}
+
+.notification.warning {
+    background: var(--warning);
+}
+
+.notification.info {
+    background: var(--secondary-color);
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
 }

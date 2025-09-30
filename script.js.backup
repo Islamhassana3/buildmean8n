@@ -80,9 +80,7 @@ canvasApp.component('workflow-node', {
                 @mousedown.stop="startConnection(point.type)"
             ></div>
             <div class="node-header">
-                <div class="node-icon">
-                    <img :src="nodeIcon" :alt="node.name" />
-                </div>
+                <div class="node-icon">{{ nodeIcon }}</div>
                 <div class="node-title">{{ node.name }}</div>
             </div>
             <div class="node-description">{{ nodeDescription }}</div>
@@ -97,24 +95,21 @@ canvasApp.component('workflow-node', {
     computed: {
         nodeIcon() {
             const icons = {
-                'Webhook': 'assets/icons/webhook.svg',
-                'Schedule': 'assets/icons/chart.svg',
-                'Email': 'assets/icons/email.svg',
-                'HTTP Request': 'assets/icons/http.svg',
-                'Send Email': 'assets/icons/email.svg',
-                'Slack': 'assets/icons/slack.svg',
-                'Database': 'assets/icons/database.svg',
-                'Google Sheets': 'assets/icons/sheets.svg',
-                'IF': 'assets/icons/chart.svg',
-                'Switch': 'assets/icons/chart.svg',
-                'Loop': 'assets/icons/chart.svg',
-                'Set': 'assets/icons/chart.svg',
-                'Code': 'assets/icons/code.svg',
-                'Function': 'assets/icons/zap.svg',
-                'n8n': 'assets/icons/n8n.svg',
-                'GitHub': 'assets/icons/github.svg'
+                'Webhook': '🌐',
+                'Schedule': '⏰',
+                'Email': '📧',
+                'HTTP Request': '🔗',
+                'Send Email': '✉️',
+                'Slack': '💬',
+                'Database': '🗄️',
+                'IF': '🔀',
+                'Switch': '🔢',
+                'Loop': '🔄',
+                'Set': '📝',
+                'Code': '💻',
+                'Function': '⚡'
             };
-            return icons[this.node.name] || 'assets/icons/chart.svg';
+            return icons[this.node.name] || '📦';
         },
         nodeDescription() {
             const descriptions = {
@@ -416,6 +411,46 @@ function getNodeDescription(type, name) {
     return descriptions[type] || 'Workflow node';
 }
 
+// Get Node Icon
+function getNodeIcon(name) {
+    const icons = {
+        'Webhook': '🌐',
+        'Schedule': '⏰',
+        'Email': '📧',
+        'HTTP Request': '🔗',
+        'Send Email': '✉️',
+        'Slack': '💬',
+        'Database': '🗄️',
+        'IF': '🔀',
+        'Switch': '🔢',
+        'Loop': '🔄',
+        'Set': '📝',
+        'Code': '💻',
+        'Function': '⚡'
+    };
+    return icons[name] || '📦';
+}
+
+// Get Node Description
+function getNodeDescription(type, name) {
+    const descriptions = {
+        'Webhook': 'Trigger via HTTP webhook',
+        'Schedule': 'Trigger on schedule',
+        'Email': 'Trigger on email received',
+        'HTTP Request': 'Make HTTP requests',
+        'Send Email': 'Send email messages',
+        'Slack': 'Send Slack messages',
+        'Database': 'Query database',
+        'IF': 'Conditional branching',
+        'Switch': 'Multiple conditions',
+        'Loop': 'Iterate over items',
+        'Set': 'Set field values',
+        'Code': 'Execute custom code',
+        'Function': 'Transform data'
+    };
+    return descriptions[name] || 'Workflow node';
+}
+
 // Canvas Mouse Handlers
 function handleCanvasMouseDown(e) {
     if (e.target === elements.canvas) {
@@ -595,6 +630,7 @@ function fitView() {
 // Chat Functionality
 function sendChatMessage() {
     const message = elements.chatInput.value.trim();
+    
     if (!message) return;
     
     // Add user message to chat
@@ -672,7 +708,7 @@ async function processNaturalLanguage(message) {
         addMessageToChat('assistant', `🤖 **AI-Powered Workflow Assistant**
 
 Here are some things you can ask me:
-
+            
 💡 **Smart Workflows:**
 • "Send email when form submitted"
 • "Slack notification on new tweet"
@@ -778,6 +814,37 @@ function createSyncContactsWorkflow() {
 }
 
 // Workflow Actions
+function clearWorkflow() {
+    state.nodes = [];
+    state.connections = [];
+    state.selectedNode = null;
+    elements.canvas.innerHTML = '';
+    elements.connectionsSvg.innerHTML = '';
+    updateCanvasInfo();
+}
+
+function saveWorkflow() {
+    const workflow = {
+        nodes: state.nodes,
+        connections: state.connections,
+        version: '1.0.0',
+        timestamp: new Date().toISOString()
+    };
+    
+    const json = JSON.stringify(workflow, null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `workflow-${Date.now()}.json`;
+    a.click();
+    
+    URL.revokeObjectURL(url);
+    
+    addMessageToChat('assistant', 'Your workflow has been saved! The JSON file will download shortly.');
+}
+
 function executeWorkflow() {
     if (state.nodes.length === 0) {
         alert('Please add some nodes to your workflow first!');
