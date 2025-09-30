@@ -10,6 +10,9 @@
     "tools/*"
   ],
   "scripts": {
+    "start": "NODE_ENV=production node server.js",
+    "start:debug": "NODE_ENV=development node --inspect=0.0.0.0:9229 server.js",
+    "dev:server": "NODE_ENV=development node --watch --inspect=9229 server.js",
     "clean": "rimraf apps/*/dist packages/*/dist",
     "dev": "npm-run-all --parallel dev:api dev:web",
     "dev:api": "npm run dev --workspace @buildmean8n/api",
@@ -39,6 +42,9 @@
     "fastify",
     "typescript"
   ],
+  "dependencies": {
+    "express": "^4.19.2"
+  },
   "author": "BuildMean8n Team",
   "license": "MIT",
   "devDependencies": {
