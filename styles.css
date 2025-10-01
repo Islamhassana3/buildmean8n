@@ -496,7 +496,6 @@ body {
 	background-color: var(--n8n-bg-hover);
 	color: var(--n8n-text-primary);
 }
-}
 
 /* Canvas Empty State */
 .n8n-canvas-empty {
