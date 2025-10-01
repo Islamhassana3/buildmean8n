@@ -308,47 +308,50 @@ body {
 	background-color: var(--n8n-bg-tertiary);
 }
 
-.n8n-node-categories {
-	flex: 1;
-	overflow-y: auto;
-	padding: var(--n8n-space-2) 0;
+/* Node filter buttons */
+.n8n-node-filters {
+	display: flex;
+	flex-direction: column;
+	padding: var(--n8n-space-2) var(--n8n-space-2);
+	border-bottom: 1px solid var(--n8n-border);
+	gap: var(--n8n-space-1);
 }
 
-.n8n-node-category {
-	margin-bottom: var(--n8n-space-1);
-}
-
-.n8n-category-header {
+.n8n-filter-btn {
 	display: flex;
 	align-items: center;
 	gap: var(--n8n-space-3);
-	padding: var(--n8n-space-3) var(--n8n-space-4);
-	cursor: pointer;
-	transition: all 0.15s ease;
+	padding: var(--n8n-space-3) var(--n8n-space-3);
+	border: none;
+	background: transparent;
 	color: var(--n8n-text-secondary);
 	font-size: var(--n8n-font-sm);
 	font-weight: var(--n8n-font-medium);
+	cursor: pointer;
 	border-radius: var(--n8n-radius-sm);
-	margin: 0 var(--n8n-space-2);
+	transition: all 0.15s ease;
+	text-align: left;
 }
 
-.n8n-category-header:hover {
+.n8n-filter-btn:hover {
 	background-color: var(--n8n-bg-hover);
 	color: var(--n8n-text-primary);
 }
 
-.n8n-node-category.active .n8n-category-header {
+.n8n-filter-btn.active {
 	background-color: var(--n8n-bg-tertiary);
 	color: var(--n8n-text-primary);
 }
 
-.n8n-node-list {
-	display: none;
-	padding: 0 var(--n8n-space-2);
+.n8n-filter-btn svg {
+	flex-shrink: 0;
 }
 
-.n8n-node-category.active .n8n-node-list {
-	display: block;
+/* Single flat node list */
+.n8n-node-list {
+	flex: 1;
+	overflow-y: auto;
+	padding: var(--n8n-space-2);
 }
 
 .n8n-node-item {
