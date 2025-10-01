@@ -1,10 +1,10 @@
 {
-  "timestamp": "2025-09-29T22:06:57.385Z",
+  "timestamp": "2025-10-01T20:10:11.733Z",
   "healthPercentage": 70,
   "summary": {
     "totalChecks": 10,
-    "healthyChecks": 9,
-    "criticalIssues": 1,
+    "healthyChecks": 7,
+    "criticalIssues": 3,
     "warnings": 1
   },
   "checks": [
@@ -16,9 +16,11 @@
     },
     {
       "name": "Dependencies",
-      "healthy": true,
-      "issues": [],
-      "details": "Package.json valid, 11 scripts defined"
+      "healthy": false,
+      "issues": [
+        "node_modules directory missing - run npm install"
+      ],
+      "details": "Package.json valid, 28 scripts defined"
     },
     {
       "name": "Configuration",
@@ -28,19 +30,56 @@
     },
     {
       "name": "JavaScript Health",
-      "healthy": true,
-      "issues": [],
-      "details": "Total JS size: 106.2KB"
+      "healthy": false,
+      "issues": [
+        "script.js: Unmatched braces"
+      ],
+      "details": "Total JS size: 105.4KB"
     },
     {
       "name": "HTML Health",
       "healthy": true,
       "issues": [],
-      "details": "HTML file size: 14.9KB"
+      "details": "HTML file size: 21.5KB"
     },
     {
       "name": "CSS Health",
       "healthy": true,
       "issues": [],
-      "details": "CSS file size: 14.5KB"
+      "details": "CSS file size: 17.3KB"
     },
+    {
+      "name": "Code Security",
+      "healthy": false,
+      "issues": [
+        "script.js: innerHTML usage (XSS risk)",
+        "script.js: Template literal injection risk",
+        "ai-assistant.js: innerHTML usage (XSS risk)",
+        "ai-assistant.js: Template literal injection risk",
+        "automation-testing.js: Template literal injection risk",
+        "backend-automation.js: Template literal injection risk"
+      ],
+      "details": "4 JavaScript files scanned"
+    },
+    {
+      "name": "Dependency Security",
+      "healthy": true,
+      "issues": [],
+      "details": "Dependency security checked"
+    },
+    {
+      "name": "Configuration Security",
+      "healthy": true,
+      "issues": [],
+      "details": "Configuration security checked"
+    },
+    {
+      "name": "Performance Health",
+      "healthy": true,
+      "issues": [
+        "Scripts not optimized with defer/async"
+      ],
+      "details": "Bundle size: 0.14MB"
+    }
+  ]
+}

@@ -1,8 +1,12 @@
 #!/usr/bin/env node
 
 // Health check script for automated monitoring
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 class HealthCheckAgent {
 	constructor() {
@@ -637,7 +641,7 @@ class HealthCheckAgent {
 }
 
 // Run health check if called directly
-if (require.main === module) {
+if (import.meta.url === `file://${process.argv[1]}`) {
 	const agent = new HealthCheckAgent();
 	agent.performHealthCheck().catch((error) => {
 		console.error('Health check error:', error);
@@ -645,4 +649,4 @@ if (require.main === module) {
 	});
 }
 
-module.exports = HealthCheckAgent;
+export default HealthCheckAgent;

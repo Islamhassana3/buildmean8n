@@ -1,20 +1,7 @@
-[build]
-builder = "nixpacks"
-
-[deploy]
-startCommand = "npm start"
-healthcheckPath = "/health"
-healthcheckTimeout = 300
-restartPolicyType = "on_failure"
-restartPolicyMaxRetries = 3
-
 [[services]]
 name = "n8n-workflow-builder"
 icon = "🚀"
-
-[services.deploy]
-startCommand = "npm start"
-numReplicas = 1
+dockerfilePath = "Dockerfile"
 
 [[services.envVars]]
 name = "NODE_ENV"
@@ -35,13 +22,7 @@ value = "${{postgres.DATABASE_URL}}"
 [[services]]
 name = "n8n"
 icon = "⚡"
-
-[services.build]
 dockerfilePath = "n8n.Dockerfile"
-
-[services.deploy]
-startCommand = "n8n start"
-numReplicas = 1
 
 [[services.envVars]]
 name = "DB_TYPE"
@@ -94,10 +75,7 @@ value = "true"
 [[services]]
 name = "postgres"
 icon = "🐘"
-
-[services.deploy]
 image = "postgres:15-alpine"
-numReplicas = 1
 
 [[services.envVars]]
 name = "POSTGRES_DB"
