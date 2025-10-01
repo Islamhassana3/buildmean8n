@@ -179,6 +179,8 @@ function init() {
     setupDragAndDrop();
     setupTabSwitching();
     updateCanvasInfo();
+    // Set up node filters after everything else is initialized
+    setupNodeFilters();
 }
 
 // Event Listeners Setup
@@ -235,6 +237,55 @@ function setupEventListeners() {
     // Keyboard shortcuts
     document.addEventListener('keydown', handleKeyboardShortcuts);
 }
+
+// Node Filter Functionality
+window.setupNodeFilters = function setupNodeFilters() {
+    const filterButtons = document.querySelectorAll('.n8n-filter-btn');
+    const nodeItems = document.querySelectorAll('.n8n-node-item');
+    
+    console.log('Setting up filters - Buttons:', filterButtons.length, 'Nodes:', nodeItems.length);
+    
+    if (filterButtons.length === 0 || nodeItems.length === 0) {
+        console.error('Filter buttons or nodes not found!');
+        return;
+    }
+    
+    filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            console.log('Filter clicked:', button.dataset.filter);
+            
+            // Update active state
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            
+            const filter = button.dataset.filter;
+            
+            // Filter nodes based on type
+            nodeItems.forEach(node => {
+                const nodeType = node.dataset.nodeType;
+                
+                if (filter === 'all') {
+                    node.style.display = 'flex';
+                } else if (filter === 'triggers' && nodeType === 'trigger') {
+                    node.style.display = 'flex';
+                } else if (filter === 'actions' && nodeType === 'action') {
+                    node.style.display = 'flex';
+                } else if (filter === 'flow' && nodeType === 'logic') {
+                    node.style.display = 'flex';
+                } else if (filter === 'transform' && nodeType === 'transform') {
+                    node.style.display = 'flex';
+                } else {
+                    node.style.display = 'none';
+                }
+            });
+        });
+    });
+    
+    // Set initial state - show all nodes
+    nodeItems.forEach(node => {
+        node.style.display = 'flex';
+    });
+};
 
 // Tab Switching
 function setupTabSwitching() {
@@ -306,20 +357,6 @@ function handleKeyboardShortcuts(e) {
     }
 }
 
-function handleConnectionPointClick(e) {
-    const connectionPoint = e.target.closest('.connection-point');
-    if (connectionPoint) {
-        e.stopPropagation();
-        const nodeId = parseInt(connectionPoint.getAttribute('data-node-id'));
-        const pointType = connectionPoint.getAttribute('data-point-type');
-        
-        if (state.isConnecting) {
-            completeConnection(nodeId, pointType);
-        } else {
-            startConnection(nodeId, pointType);
-        }
-    }
-}
 
 // Workflow Management Functions
 function saveWorkflow() {
@@ -338,49 +375,6 @@ function saveWorkflow() {
     
     // Show save notification
     showNotification('Workflow saved successfully!', 'success');
-}
-
-function executeWorkflow() {
-    if (state.nodes.length === 0) {
-        showNotification('No nodes to execute', 'warning');
-        return;
-    }
-    
-    // Show execution panel
-    const testPanel = document.getElementById('testPanel');
-    testPanel.classList.remove('hidden');
-    
-    // Simulate workflow execution
-    const resultsDiv = document.getElementById('testResults');
-    resultsDiv.innerHTML = '<p>Executing workflow...</p>';
-    
-    // Mock execution with delays
-    setTimeout(() => {
-        resultsDiv.innerHTML = '<p>🔍 Analyzing workflow structure...</p>';
-        
-        setTimeout(() => {
-            resultsDiv.innerHTML = '<p>⚡ Executing nodes in order...</p>';
-            
-            // Execute nodes in topological order (simplified)
-            const executedNodes = [];
-            state.nodes.forEach((node, index) => {
-                setTimeout(() => {
-                    executedNodes.push(node.name);
-                    resultsDiv.innerHTML = `
-                        <p>✅ Executed: ${executedNodes.join(' → ')}</p>
-                        <p>📊 Results: ${Math.floor(Math.random() * 100)} records processed</p>
-                    `;
-                    
-                    if (index === state.nodes.length - 1) {
-                        setTimeout(() => {
-                            resultsDiv.innerHTML += '<p>🎉 Workflow execution completed successfully!</p>';
-                            showNotification('Workflow executed successfully', 'success');
-                        }, 500);
-                    }
-                }, (index + 1) * 1000);
-            });
-        }, 1000);
-    }, 500);
 }
 
 function deleteNode(nodeId) {
@@ -450,8 +444,6 @@ function showPropertiesPanel(node) {
                 <button class="n8n-btn n8n-btn-secondary" onclick="duplicateNode(${node.id})">Duplicate</button>
             </div>
         </div>
-    `;
-    
     `;
     
     // Add event listeners
@@ -1058,3 +1050,4 @@ function updateCanvasInfo() {
 
 // Initialize on load
 document.addEventListener('DOMContentLoaded', init);
+}

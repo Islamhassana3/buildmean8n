@@ -66,194 +66,184 @@
                     </button>
                 </div>
 
-                <div class="n8n-node-categories">
-                    <div class="n8n-node-category active">
-                        <div class="n8n-category-header">
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                                <path d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2z"/>
-                            </svg>
-                            <span>All</span>
+                <!-- Simple filter buttons -->
+                <div class="n8n-node-filters">
+                    <button class="n8n-filter-btn active" data-filter="all">
+                        <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2z"/>
+                        </svg>
+                        <span>All</span>
+                    </button>
+                    <button class="n8n-filter-btn" data-filter="triggers">
+                        <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+                        </svg>
+                        <span>Triggers</span>
+                    </button>
+                    <button class="n8n-filter-btn" data-filter="actions">
+                        <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                        </svg>
+                        <span>Actions</span>
+                    </button>
+                    <button class="n8n-filter-btn" data-filter="flow">
+                        <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
+                            <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+                        </svg>
+                        <span>Flow</span>
+                    </button>
+                    <button class="n8n-filter-btn" data-filter="transform">
+                        <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M8.864.046C7.908-.193 7.02.53 6.956 1.466c-.072 1.051-.23 2.016-.428 2.59-.125.36-.479 1.013-1.04 1.639-.557.623-1.282 1.178-2.131 1.41C2.685 7.288 2 7.87 2 8.72v4.001c0 .845.682 1.464 1.448 1.545 1.07.114 1.564.415 2.068.723l.048.03c.272.165.578.348.97.484.397.136.861.217 1.466.217h3.5c.937 0 1.599-.477 1.934-1.064a1.86 1.86 0 0 0 .254-.912c0-.152-.023-.312-.077-.464.201-.263.38-.578.488-.901.11-.33.172-.762.004-1.149.069-.13.12-.269.159-.403.077-.27.113-.568.113-.857 0-.288-.036-.585-.113-.856a2.144 2.144 0 0 0-.138-.362 1.9 1.9 0 0 0 .234-1.734c-.206-.592-.682-1.1-1.2-1.272-.847-.282-1.803-.276-2.516-.211a9.84 9.84 0 0 0-.443.05 9.365 9.365 0 0 0-.062-4.509A1.38 1.38 0 0 0 9.125.111L8.864.046z"/>
+                        </svg>
+                        <span>Transform</span>
+                    </button>
+                </div>
+
+                <!-- Single flat node list -->
+                <div class="n8n-node-list">
+                    <!-- Trigger Nodes -->
+                    <div class="n8n-node-item" draggable="true" data-node-type="trigger" data-node-name="Webhook">
+                        <div class="n8n-node-icon">
+                            <img src="assets/icons/webhook.svg" alt="Webhook" />
+                        </div>
+                        <div class="n8n-node-info">
+                            <span class="n8n-node-name">Webhook</span>
+                            <span class="n8n-node-description">Starts workflow on HTTP request</span>
+                        </div>
+                    </div>
+                    <div class="n8n-node-item" draggable="true" data-node-type="trigger" data-node-name="Schedule">
+                        <div class="n8n-node-icon">
+                            <img src="assets/icons/chart.svg" alt="Schedule" />
+                        </div>
+                        <div class="n8n-node-info">
+                            <span class="n8n-node-name">Schedule Trigger</span>
+                            <span class="n8n-node-description">Runs workflow on schedule</span>
+                        </div>
+                    </div>
+                    <div class="n8n-node-item" draggable="true" data-node-type="trigger" data-node-name="Email">
+                        <div class="n8n-node-icon">
+                            <img src="assets/icons/email.svg" alt="Email" />
+                        </div>
+                        <div class="n8n-node-info">
+                            <span class="n8n-node-name">Email Trigger</span>
+                            <span class="n8n-node-description">Starts on incoming email</span>
                         </div>
                     </div>
 
-                    <div class="n8n-node-category">
-                        <div class="n8n-category-header">
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                                <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
-                                <path d="M3 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3 6a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 6zm0 2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"/>
-                            </svg>
-                            <span>Triggers</span>
+                    <!-- Action Nodes -->
+                    <div class="n8n-node-item" draggable="true" data-node-type="action" data-node-name="HTTP Request">
+                        <div class="n8n-node-icon">
+                            <img src="assets/icons/http.svg" alt="HTTP Request" />
                         </div>
-                        <div class="n8n-node-list">
-                            <div class="n8n-node-item" draggable="true" data-node-type="trigger" data-node-name="Webhook">
-                                <div class="n8n-node-icon">
-                                    <img src="assets/icons/webhook.svg" alt="Webhook" />
-                                </div>
-                                <div class="n8n-node-info">
-                                    <span class="n8n-node-name">Webhook</span>
-                                    <span class="n8n-node-description">Starts workflow on HTTP request</span>
-                                </div>
-                            </div>
-                            <div class="n8n-node-item" draggable="true" data-node-type="trigger" data-node-name="Schedule">
-                                <div class="n8n-node-icon">
-                                    <img src="assets/icons/chart.svg" alt="Schedule" />
-                                </div>
-                                <div class="n8n-node-info">
-                                    <span class="n8n-node-name">Schedule Trigger</span>
-                                    <span class="n8n-node-description">Runs workflow on schedule</span>
-                                </div>
-                            </div>
-                            <div class="n8n-node-item" draggable="true" data-node-type="trigger" data-node-name="Email">
-                                <div class="n8n-node-icon">
-                                    <img src="assets/icons/email.svg" alt="Email" />
-                                </div>
-                                <div class="n8n-node-info">
-                                    <span class="n8n-node-name">Email Trigger</span>
-                                    <span class="n8n-node-description">Starts on incoming email</span>
-                                </div>
-                            </div>
+                        <div class="n8n-node-info">
+                            <span class="n8n-node-name">HTTP Request</span>
+                            <span class="n8n-node-description">Makes HTTP requests</span>
+                        </div>
+                    </div>
+                    <div class="n8n-node-item" draggable="true" data-node-type="action" data-node-name="Send Email">
+                        <div class="n8n-node-icon">
+                            <img src="assets/icons/email.svg" alt="Send Email" />
+                        </div>
+                        <div class="n8n-node-info">
+                            <span class="n8n-node-name">Send Email</span>
+                            <span class="n8n-node-description">Sends email messages</span>
+                        </div>
+                    </div>
+                    <div class="n8n-node-item" draggable="true" data-node-type="action" data-node-name="Slack">
+                        <div class="n8n-node-icon">
+                            <img src="assets/icons/slack.svg" alt="Slack" />
+                        </div>
+                        <div class="n8n-node-info">
+                            <span class="n8n-node-name">Slack</span>
+                            <span class="n8n-node-description">Send Slack messages</span>
+                        </div>
+                    </div>
+                    <div class="n8n-node-item" draggable="true" data-node-type="action" data-node-name="Database">
+                        <div class="n8n-node-icon">
+                            <img src="assets/icons/database.svg" alt="Database" />
+                        </div>
+                        <div class="n8n-node-info">
+                            <span class="n8n-node-name">Database</span>
+                            <span class="n8n-node-description">Execute database queries</span>
+                        </div>
+                    </div>
+                    <div class="n8n-node-item" draggable="true" data-node-type="action" data-node-name="Google Sheets">
+                        <div class="n8n-node-icon">
+                            <img src="assets/icons/sheets.svg" alt="Google Sheets" />
+                        </div>
+                        <div class="n8n-node-info">
+                            <span class="n8n-node-name">Google Sheets</span>
+                            <span class="n8n-node-description">Read/write Google Sheets</span>
+                        </div>
+                    </div>
+                    <div class="n8n-node-item" draggable="true" data-node-type="action" data-node-name="GitHub">
+                        <div class="n8n-node-icon">
+                            <img src="assets/icons/github.svg" alt="GitHub" />
+                        </div>
+                        <div class="n8n-node-info">
+                            <span class="n8n-node-name">GitHub</span>
+                            <span class="n8n-node-description">Interact with GitHub API</span>
                         </div>
                     </div>
 
-                    <div class="n8n-node-category">
-                        <div class="n8n-category-header">
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                                <path d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V4.5z"/>
-                            </svg>
-                            <span>Actions</span>
+                    <!-- Flow/Logic Nodes -->
+                    <div class="n8n-node-item" draggable="true" data-node-type="logic" data-node-name="IF">
+                        <div class="n8n-node-icon">
+                            <img src="assets/icons/chart.svg" alt="IF" />
                         </div>
-                        <div class="n8n-node-list">
-                            <div class="n8n-node-item" draggable="true" data-node-type="action" data-node-name="HTTP Request">
-                                <div class="n8n-node-icon">
-                                    <img src="assets/icons/http.svg" alt="HTTP Request" />
-                                </div>
-                                <div class="n8n-node-info">
-                                    <span class="n8n-node-name">HTTP Request</span>
-                                    <span class="n8n-node-description">Makes HTTP requests</span>
-                                </div>
-                            </div>
-                            <div class="n8n-node-item" draggable="true" data-node-type="action" data-node-name="Send Email">
-                                <div class="n8n-node-icon">
-                                    <img src="assets/icons/email.svg" alt="Send Email" />
-                                </div>
-                                <div class="n8n-node-info">
-                                    <span class="n8n-node-name">Send Email</span>
-                                    <span class="n8n-node-description">Sends email messages</span>
-                                </div>
-                            </div>
-                            <div class="n8n-node-item" draggable="true" data-node-type="action" data-node-name="Slack">
-                                <div class="n8n-node-icon">
-                                    <img src="assets/icons/slack.svg" alt="Slack" />
-                                </div>
-                                <div class="n8n-node-info">
-                                    <span class="n8n-node-name">Slack</span>
-                                    <span class="n8n-node-description">Send Slack messages</span>
-                                </div>
-                            </div>
-                            <div class="n8n-node-item" draggable="true" data-node-type="action" data-node-name="Database">
-                                <div class="n8n-node-icon">
-                                    <img src="assets/icons/database.svg" alt="Database" />
-                                </div>
-                                <div class="n8n-node-info">
-                                    <span class="n8n-node-name">Database</span>
-                                    <span class="n8n-node-description">Execute database queries</span>
-                                </div>
-                            </div>
-                            <div class="n8n-node-item" draggable="true" data-node-type="action" data-node-name="Google Sheets">
-                                <div class="n8n-node-icon">
-                                    <img src="assets/icons/sheets.svg" alt="Google Sheets" />
-                                </div>
-                                <div class="n8n-node-info">
-                                    <span class="n8n-node-name">Google Sheets</span>
-                                    <span class="n8n-node-description">Read/write Google Sheets</span>
-                                </div>
-                            </div>
-                            <div class="n8n-node-item" draggable="true" data-node-type="action" data-node-name="GitHub">
-                                <div class="n8n-node-icon">
-                                    <img src="assets/icons/github.svg" alt="GitHub" />
-                                </div>
-                                <div class="n8n-node-info">
-                                    <span class="n8n-node-name">GitHub</span>
-                                    <span class="n8n-node-description">Interact with GitHub API</span>
-                                </div>
-                            </div>
+                        <div class="n8n-node-info">
+                            <span class="n8n-node-name">IF</span>
+                            <span class="n8n-node-description">Route based on conditions</span>
+                        </div>
+                    </div>
+                    <div class="n8n-node-item" draggable="true" data-node-type="logic" data-node-name="Switch">
+                        <div class="n8n-node-icon">
+                            <img src="assets/icons/chart.svg" alt="Switch" />
+                        </div>
+                        <div class="n8n-node-info">
+                            <span class="n8n-node-name">Switch</span>
+                            <span class="n8n-node-description">Multiple condition routing</span>
+                        </div>
+                    </div>
+                    <div class="n8n-node-item" draggable="true" data-node-type="logic" data-node-name="Loop">
+                        <div class="n8n-node-icon">
+                            <img src="assets/icons/chart.svg" alt="Loop" />
+                        </div>
+                        <div class="n8n-node-info">
+                            <span class="n8n-node-name">Loop</span>
+                            <span class="n8n-node-description">Iterate over items</span>
                         </div>
                     </div>
 
-                    <div class="n8n-node-category">
-                        <div class="n8n-category-header">
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                                <path d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
-                                <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
-                            </svg>
-                            <span>Flow</span>
+                    <!-- Transform Nodes -->
+                    <div class="n8n-node-item" draggable="true" data-node-type="transform" data-node-name="Set">
+                        <div class="n8n-node-icon">
+                            <img src="assets/icons/chart.svg" alt="Set" />
                         </div>
-                        <div class="n8n-node-list">
-                            <div class="n8n-node-item" draggable="true" data-node-type="logic" data-node-name="IF">
-                                <div class="n8n-node-icon">
-                                    <img src="assets/icons/chart.svg" alt="IF" />
-                                </div>
-                                <div class="n8n-node-info">
-                                    <span class="n8n-node-name">IF</span>
-                                    <span class="n8n-node-description">Route based on conditions</span>
-                                </div>
-                            </div>
-                            <div class="n8n-node-item" draggable="true" data-node-type="logic" data-node-name="Switch">
-                                <div class="n8n-node-icon">
-                                    <img src="assets/icons/chart.svg" alt="Switch" />
-                                </div>
-                                <div class="n8n-node-info">
-                                    <span class="n8n-node-name">Switch</span>
-                                    <span class="n8n-node-description">Multiple condition routing</span>
-                                </div>
-                            </div>
-                            <div class="n8n-node-item" draggable="true" data-node-type="logic" data-node-name="Loop">
-                                <div class="n8n-node-icon">
-                                    <img src="assets/icons/chart.svg" alt="Loop" />
-                                </div>
-                                <div class="n8n-node-info">
-                                    <span class="n8n-node-name">Loop</span>
-                                    <span class="n8n-node-description">Iterate over items</span>
-                                </div>
-                            </div>
+                        <div class="n8n-node-info">
+                            <span class="n8n-node-name">Set</span>
+                            <span class="n8n-node-description">Set workflow data</span>
                         </div>
                     </div>
-
-                    <div class="n8n-node-category">
-                        <div class="n8n-category-header">
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                                <path d="M8.864.046C7.908-.193 7.02.53 6.956 1.466c-.072 1.051-.23 2.016-.428 2.59-.125.36-.479 1.013-1.04 1.639-.557.623-1.282 1.178-2.131 1.41C2.685 7.288 2 7.87 2 8.72v4.001c0 .845.682 1.464 1.448 1.545 1.07.114 1.564.415 2.068.723l.048.03c.272.165.578.348.97.484.397.136.861.217 1.466.217h3.5c.937 0 1.599-.477 1.934-1.064a1.86 1.86 0 0 0 .254-.912c0-.152-.023-.312-.077-.464.201-.263.38-.578.488-.901.11-.33.172-.762.004-1.149.069-.13.12-.269.159-.403.077-.27.113-.568.113-.857 0-.288-.036-.585-.113-.856a2.144 2.144 0 0 0-.138-.362 1.9 1.9 0 0 0 .234-1.734c-.206-.592-.682-1.1-1.2-1.272-.847-.282-1.803-.276-2.516-.211a9.84 9.84 0 0 0-.443.05 9.365 9.365 0 0 0-.062-4.509A1.38 1.38 0 0 0 9.125.111L8.864.046zM11.5 14.721H8c-.51 0-.863-.069-1.14-.164-.281-.097-.506-.228-.776-.393l-.04-.024c-.555-.339-1.198-.731-2.49-.868-.333-.036-.554-.29-.554-.55V8.72c0-.254.226-.543.62-.65 1.095-.3 1.977-.996 2.614-1.708.635-.71 1.064-1.475 1.238-1.978.243-.7.407-1.768.482-2.85.025-.362.36-.594.667-.518l.262.066c.16.04.258.143.288.255a8.34 8.34 0 0 1-.145 4.725.5.5 0 0 0 .595.644l.003-.001.014-.003.058-.014a8.908 8.908 0 0 1 1.036-.157c.663-.06 1.457-.054 2.11.164.175.058.45.3.57.65.107.308.087.67-.266 1.022l-.353.353.353.354c.043.043.105.141.154.315.048.167.075.37.075.581 0 .212-.027.414-.075.582-.05.174-.111.272-.154.315l-.353.353.353.354c.047.047.109.177.005.488a2.224 2.224 0 0 1-.505.805l-.353.353.353.354c.006.005.041.05.041.17a.866.866 0 0 1-.121.416c-.165.288-.503.56-1.066.56z"/>
-                            </svg>
-                            <span>Transform</span>
+                    <div class="n8n-node-item" draggable="true" data-node-type="transform" data-node-name="Code">
+                        <div class="n8n-node-icon">
+                            <img src="assets/icons/code.svg" alt="Code" />
                         </div>
-                        <div class="n8n-node-list">
-                            <div class="n8n-node-item" draggable="true" data-node-type="transform" data-node-name="Set">
-                                <div class="n8n-node-icon">
-                                    <img src="assets/icons/chart.svg" alt="Set" />
-                                </div>
-                                <div class="n8n-node-info">
-                                    <span class="n8n-node-name">Set</span>
-                                    <span class="n8n-node-description">Set workflow data</span>
-                                </div>
-                            </div>
-                            <div class="n8n-node-item" draggable="true" data-node-type="transform" data-node-name="Code">
-                                <div class="n8n-node-icon">
-                                    <img src="assets/icons/code.svg" alt="Code" />
-                                </div>
-                                <div class="n8n-node-info">
-                                    <span class="n8n-node-name">Code</span>
-                                    <span class="n8n-node-description">Run custom JavaScript</span>
-                                </div>
-                            </div>
-                            <div class="n8n-node-item" draggable="true" data-node-type="transform" data-node-name="Function">
-                                <div class="n8n-node-icon">
-                                    <img src="assets/icons/zap.svg" alt="Function" />
-                                </div>
-                                <div class="n8n-node-info">
-                                    <span class="n8n-node-name">Function</span>
-                                    <span class="n8n-node-description">Run custom functions</span>
-                                </div>
-                            </div>
+                        <div class="n8n-node-info">
+                            <span class="n8n-node-name">Code</span>
+                            <span class="n8n-node-description">Run custom JavaScript</span>
+                        </div>
+                    </div>
+                    <div class="n8n-node-item" draggable="true" data-node-type="transform" data-node-name="Function">
+                        <div class="n8n-node-icon">
+                            <img src="assets/icons/zap.svg" alt="Function" />
+                        </div>
+                        <div class="n8n-node-info">
+                            <span class="n8n-node-name">Function</span>
+                            <span class="n8n-node-description">Run custom functions</span>
                         </div>
                     </div>
                 </div>
