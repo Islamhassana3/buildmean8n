@@ -174,7 +174,127 @@ if (typeof Vue !== 'undefined') {
     // Mount Vue app on canvas
     canvasApp.mount('#workflow-nodes');
 } else {
-    console.error('Vue.js is not available. The application requires Vue.js to function properly.');
+    console.warn('Vue.js is not available. Using fallback rendering.');
+    // Fallback: render nodes without Vue
+    setupFallbackNodeRendering();
+}
+
+// Fallback node rendering when Vue is not available
+function setupFallbackNodeRendering() {
+    // Watch for changes to state.nodes and re-render
+    const originalPush = state.nodes.push;
+    state.nodes.push = function(...args) {
+        const result = originalPush.apply(this, args);
+        renderNodesWithoutVue();
+        return result;
+    };
+    
+    renderNodesWithoutVue();
+}
+
+function renderNodesWithoutVue() {
+    const container = document.getElementById('workflow-nodes');
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    state.nodes.forEach(node => {
+        const nodeEl = document.createElement('div');
+        nodeEl.className = `workflow-node ${node.type}`;
+        nodeEl.id = `node-${node.id}`;
+        nodeEl.style.cssText = `position: absolute; left: ${node.x}px; top: ${node.y}px;`;
+        
+        // Add connection points
+        if (node.type !== 'trigger') {
+            const inputPoint = document.createElement('div');
+            inputPoint.className = 'connection-point input';
+            inputPoint.setAttribute('data-node-id', node.id);
+            inputPoint.setAttribute('data-point-type', 'input');
+            nodeEl.appendChild(inputPoint);
+        }
+        
+        const outputPoint = document.createElement('div');
+        outputPoint.className = 'connection-point output';
+        outputPoint.setAttribute('data-node-id', node.id);
+        outputPoint.setAttribute('data-point-type', 'output');
+        nodeEl.appendChild(outputPoint);
+        
+        // Add node content
+        const header = document.createElement('div');
+        header.className = 'node-header';
+        
+        const icon = document.createElement('div');
+        icon.className = 'node-icon';
+        const iconMap = {
+            'Webhook': '🌐', 'Schedule': '⏰', 'Email': '📧',
+            'HTTP Request': '🔗', 'Send Email': '✉️', 'Slack': '💬',
+            'Database': '🗄️', 'Google Sheets': '📊', 'GitHub': '🐙',
+            'IF': '🔀', 'Switch': '🔢', 'Loop': '🔄',
+            'Set': '📝', 'Code': '💻', 'Function': '⚡'
+        };
+        icon.textContent = iconMap[node.name] || '📦';
+        
+        const title = document.createElement('div');
+        title.className = 'node-title';
+        title.textContent = node.name;
+        
+        header.appendChild(icon);
+        header.appendChild(title);
+        
+        const description = document.createElement('div');
+        description.className = 'node-description';
+        const descMap = {
+            'trigger': 'Triggers workflow execution',
+            'action': 'Performs an action',
+            'logic': 'Controls workflow flow',
+            'transform': 'Transforms data'
+        };
+        description.textContent = descMap[node.type] || 'Workflow node';
+        
+        const controls = document.createElement('div');
+        controls.className = 'node-controls';
+        
+        const configBtn = document.createElement('button');
+        configBtn.textContent = '⚙️';
+        configBtn.onclick = () => configureNode(node.id);
+        
+        const deleteBtn = document.createElement('button');
+        deleteBtn.textContent = '🗑️';
+        deleteBtn.onclick = () => deleteNode(node.id);
+        
+        controls.appendChild(configBtn);
+        controls.appendChild(deleteBtn);
+        
+        nodeEl.appendChild(header);
+        nodeEl.appendChild(description);
+        nodeEl.appendChild(controls);
+        
+        // Make draggable
+        nodeEl.addEventListener('mousedown', (e) => {
+            if (e.target.classList.contains('workflow-node') ||
+                e.target.classList.contains('node-header') ||
+                e.target.classList.contains('node-title')) {
+                state.selectedNode = node;
+                state.draggedNode = node;
+                state.dragOffset = {
+                    x: e.clientX - node.x,
+                    y: e.clientY - node.y
+                };
+                showPropertiesPanel(node);
+            }
+        });
+        
+        container.appendChild(nodeEl);
+    });
+    
+    updateConnections();
+}
+
+function configureNode(nodeId) {
+    const node = state.nodes.find(n => n.id === nodeId);
+    if (node) {
+        showPropertiesPanel(node);
+    }
 }
 
 // Initialize Application
@@ -393,8 +513,13 @@ function deleteNode(nodeId) {
     
     // Clear selection
     state.selectedNode = null;
-    if (canvasApp._instance) {
+    if (canvasApp && canvasApp._instance) {
         canvasApp._instance.data.selectedNodeId = null;
+    }
+    
+    // Re-render if Vue is not available
+    if (typeof Vue === 'undefined' || !canvasApp) {
+        renderNodesWithoutVue();
     }
     
     // Redraw canvas
@@ -412,8 +537,13 @@ function clearWorkflow() {
     state.panX = 0;
     state.panY = 0;
     
-    if (canvasApp._instance) {
+    if (canvasApp && canvasApp._instance) {
         canvasApp._instance.data.selectedNodeId = null;
+    }
+    
+    // Re-render if Vue is not available
+    if (typeof Vue === 'undefined' || !canvasApp) {
+        renderNodesWithoutVue();
     }
     
     updateConnections();
@@ -550,6 +680,12 @@ function createNode(type, name, x, y) {
     };
     
     state.nodes.push(node);
+    
+    // If Vue is not available, manually re-render
+    if (typeof Vue === 'undefined' || !canvasApp) {
+        renderNodesWithoutVue();
+    }
+    
     updateCanvasInfo();
     
     return node;
