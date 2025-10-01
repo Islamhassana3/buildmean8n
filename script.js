@@ -377,49 +377,6 @@ function saveWorkflow() {
     showNotification('Workflow saved successfully!', 'success');
 }
 
-function executeWorkflow() {
-    if (state.nodes.length === 0) {
-        showNotification('No nodes to execute', 'warning');
-        return;
-    }
-    
-    // Show execution panel
-    const testPanel = document.getElementById('testPanel');
-    testPanel.classList.remove('hidden');
-    
-    // Simulate workflow execution
-    const resultsDiv = document.getElementById('testResults');
-    resultsDiv.innerHTML = '<p>Executing workflow...</p>';
-    
-    // Mock execution with delays
-    setTimeout(() => {
-        resultsDiv.innerHTML = '<p>🔍 Analyzing workflow structure...</p>';
-        
-        setTimeout(() => {
-            resultsDiv.innerHTML = '<p>⚡ Executing nodes in order...</p>';
-            
-            // Execute nodes in topological order (simplified)
-            const executedNodes = [];
-            state.nodes.forEach((node, index) => {
-                setTimeout(() => {
-                    executedNodes.push(node.name);
-                    resultsDiv.innerHTML = `
-                        <p>✅ Executed: ${executedNodes.join(' → ')}</p>
-                        <p>📊 Results: ${Math.floor(Math.random() * 100)} records processed</p>
-                    `;
-                    
-                    if (index === state.nodes.length - 1) {
-                        setTimeout(() => {
-                            resultsDiv.innerHTML += '<p>🎉 Workflow execution completed successfully!</p>';
-                            showNotification('Workflow executed successfully', 'success');
-                        }, 500);
-                    }
-                }, (index + 1) * 1000);
-            });
-        }, 1000);
-    }, 500);
-}
-
 function deleteNode(nodeId) {
     // Remove node from state
     state.nodes = state.nodes.filter(node => node.id !== nodeId);
@@ -487,8 +444,6 @@ function showPropertiesPanel(node) {
                 <button class="n8n-btn n8n-btn-secondary" onclick="duplicateNode(${node.id})">Duplicate</button>
             </div>
         </div>
-    `;
-    
     `;
     
     // Add event listeners
@@ -1095,3 +1050,4 @@ function updateCanvasInfo() {
 
 // Initialize on load
 document.addEventListener('DOMContentLoaded', init);
+}
