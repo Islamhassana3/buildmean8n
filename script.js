@@ -229,11 +229,49 @@ function setupEventListeners() {
     // Node search
     document.getElementById('nodeSearch').addEventListener('input', handleNodeSearch);
     
+    // Node filter buttons
+    setupNodeFilters();
+    
     // Connection point clicks (delegate to canvas)
     elements.canvas.addEventListener('click', handleConnectionPointClick);
     
     // Keyboard shortcuts
     document.addEventListener('keydown', handleKeyboardShortcuts);
+}
+
+// Node Filter Functionality
+function setupNodeFilters() {
+    const filterButtons = document.querySelectorAll('.n8n-filter-btn');
+    const nodeItems = document.querySelectorAll('.n8n-node-item');
+    
+    filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            // Update active state
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            
+            const filter = button.dataset.filter;
+            
+            // Filter nodes based on type
+            nodeItems.forEach(node => {
+                const nodeType = node.dataset.nodeType;
+                
+                if (filter === 'all') {
+                    node.style.display = 'flex';
+                } else if (filter === 'triggers' && nodeType === 'trigger') {
+                    node.style.display = 'flex';
+                } else if (filter === 'actions' && nodeType === 'action') {
+                    node.style.display = 'flex';
+                } else if (filter === 'flow' && nodeType === 'logic') {
+                    node.style.display = 'flex';
+                } else if (filter === 'transform' && nodeType === 'transform') {
+                    node.style.display = 'flex';
+                } else {
+                    node.style.display = 'none';
+                }
+            });
+        });
+    });
 }
 
 // Tab Switching
