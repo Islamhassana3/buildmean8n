@@ -27,44 +27,46 @@ const elements = {
     canvasInfo: document.getElementById('canvasInfo')
 };
 
-// Vue App for Canvas
-const canvasApp = Vue.createApp({
-    data() {
-        return {
-            nodes: state.nodes,
-            selectedNodeId: null
-        };
-    },
-    methods: {
-        onNodeSelected(node) {
-            this.selectedNodeId = node.id;
-            state.selectedNode = node;
-            showPropertiesPanel(node);
+// Vue App for Canvas - with error handling
+let canvasApp = null;
+if (typeof Vue !== 'undefined') {
+    canvasApp = Vue.createApp({
+        data() {
+            return {
+                nodes: state.nodes,
+                selectedNodeId: null
+            };
         },
-        onDragStart(data) {
-            state.draggedNode = data.node;
-            state.dragOffset = data.offset;
+        methods: {
+            onNodeSelected(node) {
+                this.selectedNodeId = node.id;
+                state.selectedNode = node;
+                showPropertiesPanel(node);
+            },
+            onDragStart(data) {
+                state.draggedNode = data.node;
+                state.dragOffset = data.offset;
+            },
+            onConnectionStart(data) {
+                startConnection(data.nodeId, data.pointType);
+            },
+            onConfigureNode(node) {
+                configureNode(node.id);
+            },
+            onDeleteNode(node) {
+                deleteNode(node.id);
+            }
         },
-        onConnectionStart(data) {
-            startConnection(data.nodeId, data.pointType);
-        },
-        onConfigureNode(node) {
-            configureNode(node.id);
-        },
-        onDeleteNode(node) {
-            deleteNode(node.id);
+        mounted() {
+            // Watch for changes in global state
+            this.$watch(() => state.nodes, (newNodes) => {
+                this.nodes = newNodes;
+            }, { deep: true });
         }
-    },
-    mounted() {
-        // Watch for changes in global state
-        this.$watch(() => state.nodes, (newNodes) => {
-            this.nodes = newNodes;
-        }, { deep: true });
-    }
-});
+    });
 
-// Register the WorkflowNode component (inline for simplicity)
-canvasApp.component('workflow-node', {
+    // Register the WorkflowNode component (inline for simplicity)
+    canvasApp.component('workflow-node', {
     template: `
         <div
             :class="['workflow-node', node.type, { selected: selected }]"
@@ -167,10 +169,13 @@ canvasApp.component('workflow-node', {
             this.$emit('delete-node', this.node);
         }
     }
-});
+    });
 
-// Mount Vue app on canvas
-canvasApp.mount('#workflow-nodes');
+    // Mount Vue app on canvas
+    canvasApp.mount('#workflow-nodes');
+} else {
+    console.error('Vue.js is not available. The application requires Vue.js to function properly.');
+}
 
 // Initialize Application
 function init() {
@@ -1050,4 +1055,3 @@ function updateCanvasInfo() {
 
 // Initialize on load
 document.addEventListener('DOMContentLoaded', init);
-}

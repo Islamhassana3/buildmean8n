@@ -5,7 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>n8n - Workflow Automation</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.js"></script>
+    <!-- Vue.js fallback handler -->
+    <script>
+        // Fallback CDN for Vue.js - defined first
+        function loadVueFallback() {
+            if (typeof Vue === 'undefined') {
+                console.warn('Primary Vue CDN failed, trying fallback...');
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/vue@3/dist/vue.global.js';
+                script.onerror = function() {
+                    console.error('All Vue CDN sources failed. Application may not work correctly.');
+                    // Show error message to user
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const errorDiv = document.createElement('div');
+                        errorDiv.style.cssText = 'position: fixed; top: 10px; left: 50%; transform: translateX(-50%); background: #ff6d5a; color: white; padding: 15px 20px; border-radius: 6px; z-index: 10000; font-family: Inter, sans-serif; box-shadow: 0 4px 12px rgba(0,0,0,0.15);';
+                        errorDiv.innerHTML = '⚠️ Failed to load Vue.js. Some features may not work. Please check your internet connection or try refreshing the page.';
+                        document.body.appendChild(errorDiv);
+                        setTimeout(() => errorDiv.remove(), 10000);
+                    });
+                };
+                document.head.appendChild(script);
+            }
+        }
+    </script>
+    <!-- Vue.js with multiple CDN fallbacks -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.js" onerror="loadVueFallback()"></script>
     <script src="WorkflowNode.vue" type="module"></script>
     <script src="ai-assistant.js"></script>
     <script src="automation-testing.js"></script>
