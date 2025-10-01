@@ -1,0 +1,13 @@
+{
+  "name": "@buildmean8n/workflows",
+  "version": "0.1.0",
+  "private": true,
+  "description": "BuildMean8n workflow models and types",
+  "type": "module",
+  "scripts": {
+    "build": "echo 'Workflows build not yet implemented'",
+    "test": "echo 'Workflows tests not yet implemented'"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

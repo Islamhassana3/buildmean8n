@@ -1,0 +1,13 @@
+{
+  "name": "@buildmean8n/nodes",
+  "version": "0.1.0",
+  "private": true,
+  "description": "BuildMean8n node catalog and definitions",
+  "type": "module",
+  "scripts": {
+    "build": "echo 'Nodes build not yet implemented'",
+    "test": "echo 'Nodes tests not yet implemented'"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

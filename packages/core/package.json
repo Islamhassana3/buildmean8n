@@ -1,0 +1,13 @@
+{
+  "name": "@buildmean8n/core",
+  "version": "0.1.0",
+  "private": true,
+  "description": "BuildMean8n core workflow engine",
+  "type": "module",
+  "scripts": {
+    "build": "echo 'Core build not yet implemented'",
+    "test": "echo 'Core tests not yet implemented'"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}
