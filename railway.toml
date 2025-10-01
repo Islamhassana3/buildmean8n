@@ -1,6 +1,7 @@
 [[services]]
 name = "n8n-workflow-builder"
 icon = "🚀"
+dockerfilePath = "Dockerfile"
 
 [[services.envVars]]
 name = "NODE_ENV"
@@ -21,6 +22,7 @@ value = "${{postgres.DATABASE_URL}}"
 [[services]]
 name = "n8n"
 icon = "⚡"
+dockerfilePath = "n8n.Dockerfile"
 
 [[services.envVars]]
 name = "DB_TYPE"
@@ -73,6 +75,7 @@ value = "true"
 [[services]]
 name = "postgres"
 icon = "🐘"
+image = "postgres:15-alpine"
 
 [[services.envVars]]
 name = "POSTGRES_DB"
