@@ -1,0 +1,14 @@
+{
+  "name": "@buildmean8n/web",
+  "version": "0.1.0",
+  "private": true,
+  "description": "BuildMean8n web UI",
+  "type": "module",
+  "scripts": {
+    "dev": "echo 'Web dev server not yet implemented'",
+    "build": "echo 'Web build not yet implemented'",
+    "test": "echo 'Web tests not yet implemented'"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}
