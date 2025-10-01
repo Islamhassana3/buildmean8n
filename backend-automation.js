@@ -321,12 +321,19 @@ class BackendAutomationManager {
 
 	// Setup monitoring and alerting
 	setupMonitoring() {
-		this.startHealthChecks();
 		this.setupErrorMonitoring();
+	}
+
+	// Start health check monitoring
+	startHealthChecks() {
+		// Initial health check
+		this.performHealthCheck();
 	}
 
 	// Start periodic background tasks
 	startPeriodicTasks() {
+		// Start health checks
+		this.startHealthChecks();
 		// Rotate API keys every 24 hours
 		setInterval(
 			() => {
