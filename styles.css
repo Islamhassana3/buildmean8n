@@ -97,6 +97,31 @@ body {
 	overflow: hidden;
 }
 
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+	width: 8px;
+	height: 8px;
+}
+
+::-webkit-scrollbar-track {
+	background: var(--n8n-bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+	background: var(--n8n-border);
+	border-radius: var(--n8n-radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: var(--n8n-border-hover);
+}
+
+/* Firefox scrollbar */
+* {
+	scrollbar-width: thin;
+	scrollbar-color: var(--n8n-border) var(--n8n-bg-secondary);
+}
+
 /* n8n App Container */
 .n8n-app {
 	height: 100vh;
