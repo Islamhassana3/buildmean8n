@@ -5,34 +5,34 @@ const fs = require('fs');
 const path = require('path');
 
 class DocumentationGenerator {
-    constructor() {
-        this.timestamp = new Date().toISOString();
-        this.version = '1.0.0';
-    }
+	constructor() {
+		this.timestamp = new Date().toISOString();
+		this.version = '1.0.0';
+	}
 
-    // Generate comprehensive documentation
-    async generateAllDocs() {
-        console.log('📚 Generating automated documentation...\n');
+	// Generate comprehensive documentation
+	async generateAllDocs() {
+		console.log('📚 Generating automated documentation...\n');
 
-        try {
-            await this.generateAPIReference();
-            await this.generateWorkflowGuide();
-            await this.generateAutomationGuide();
-            await this.generateContributorGuide();
-            await this.updateReadme();
+		try {
+			await this.generateAPIReference();
+			await this.generateWorkflowGuide();
+			await this.generateAutomationGuide();
+			await this.generateContributorGuide();
+			await this.updateReadme();
 
-            console.log('✅ Documentation generation completed successfully');
-        } catch (error) {
-            console.error('❌ Documentation generation failed:', error);
-            process.exit(1);
-        }
-    }
+			console.log('✅ Documentation generation completed successfully');
+		} catch (error) {
+			console.error('❌ Documentation generation failed:', error);
+			process.exit(1);
+		}
+	}
 
-    // Generate API reference documentation
-    async generateAPIReference() {
-        console.log('📖 Generating API reference...');
+	// Generate API reference documentation
+	async generateAPIReference() {
+		console.log('📖 Generating API reference...');
 
-        const apiDocs = `# API Reference
+		const apiDocs = `# API Reference
 
 > This documentation is auto-generated. Last updated: ${this.timestamp}
 
@@ -188,15 +188,15 @@ document.addEventListener('nodeCreated', (event) => {
 *This API reference is automatically generated and updated with each release.*
 `;
 
-        fs.writeFileSync('docs/API.md', apiDocs);
-        console.log('  ✅ API reference generated');
-    }
+		fs.writeFileSync('docs/API.md', apiDocs);
+		console.log('  ✅ API reference generated');
+	}
 
-    // Generate workflow creation guide
-    async generateWorkflowGuide() {
-        console.log('📝 Generating workflow guide...');
+	// Generate workflow creation guide
+	async generateWorkflowGuide() {
+		console.log('📝 Generating workflow guide...');
 
-        const workflowGuide = `# Workflow Creation Guide
+		const workflowGuide = `# Workflow Creation Guide
 
 > Auto-generated guide. Last updated: ${this.timestamp}
 
@@ -355,15 +355,15 @@ Configure time-based triggers:
 *Happy Automating! 🚀*
 `;
 
-        fs.writeFileSync('docs/WORKFLOW_GUIDE.md', workflowGuide);
-        console.log('  ✅ Workflow guide generated');
-    }
+		fs.writeFileSync('docs/WORKFLOW_GUIDE.md', workflowGuide);
+		console.log('  ✅ Workflow guide generated');
+	}
 
-    // Generate automation system guide
-    async generateAutomationGuide() {
-        console.log('🤖 Generating automation guide...');
+	// Generate automation system guide
+	async generateAutomationGuide() {
+		console.log('🤖 Generating automation guide...');
 
-        const automationGuide = `# Automation System Guide
+		const automationGuide = `# Automation System Guide
 
 > Comprehensive automation documentation. Last updated: ${this.timestamp}
 
@@ -563,15 +563,15 @@ localStorage.setItem('debug', 'true');
 *Automation makes everything better! 🤖*
 `;
 
-        fs.writeFileSync('docs/AUTOMATION_GUIDE.md', automationGuide);
-        console.log('  ✅ Automation guide generated');
-    }
+		fs.writeFileSync('docs/AUTOMATION_GUIDE.md', automationGuide);
+		console.log('  ✅ Automation guide generated');
+	}
 
-    // Generate contributor guide
-    async generateContributorGuide() {
-        console.log('👥 Generating contributor guide...');
+	// Generate contributor guide
+	async generateContributorGuide() {
+		console.log('👥 Generating contributor guide...');
 
-        const contributorGuide = `# Contributor Guide
+		const contributorGuide = `# Contributor Guide
 
 > Auto-generated contributor documentation. Last updated: ${this.timestamp}
 
@@ -813,19 +813,19 @@ class CustomAutomationAgent {
 *Together we build the future of workflow automation! 🚀*
 `;
 
-        fs.writeFileSync('docs/CONTRIBUTOR_GUIDE.md', contributorGuide);
-        console.log('  ✅ Contributor guide generated');
-    }
+		fs.writeFileSync('docs/CONTRIBUTOR_GUIDE.md', contributorGuide);
+		console.log('  ✅ Contributor guide generated');
+	}
 
-    // Update main README with automation features
-    async updateReadme() {
-        console.log('📄 Updating README...');
+	// Update main README with automation features
+	async updateReadme() {
+		console.log('📄 Updating README...');
 
-        // Read current README
-        let readme = fs.readFileSync('README.md', 'utf8');
+		// Read current README
+		let readme = fs.readFileSync('README.md', 'utf8');
 
-        // Add automation section if it doesn't exist
-        const automationSection = `
+		// Add automation section if it doesn't exist
+		const automationSection = `
 ## 🤖 Comprehensive Automation System
 
 Build Mean8n features a complete automation ecosystem with 115+ automated features:
@@ -872,44 +872,42 @@ Build Mean8n features a complete automation ecosystem with 115+ automated featur
 - **Intelligent Error Recovery**: Self-healing automation systems
 `;
 
-        // Insert automation section after features section
-        const featuresIndex = readme.indexOf('## 🌟 Features');
-        if (featuresIndex > -1) {
-            const nextSectionIndex = readme.indexOf('## ', featuresIndex + 1);
-            const insertIndex = nextSectionIndex > -1 ? nextSectionIndex : readme.length;
-            
-            readme = readme.slice(0, insertIndex) + automationSection + '\n\n' + readme.slice(insertIndex);
-        } else {
-            // Add at the end if features section not found
-            readme += automationSection;
-        }
+		// Insert automation section after features section
+		const featuresIndex = readme.indexOf('## 🌟 Features');
+		if (featuresIndex > -1) {
+			const nextSectionIndex = readme.indexOf('## ', featuresIndex + 1);
+			const insertIndex = nextSectionIndex > -1 ? nextSectionIndex : readme.length;
 
-        // Update automation status in existing sections
-        readme = readme.replace(
-            /- \[ \] Advanced AI capabilities using LLMs/g,
-            '- [x] Advanced AI capabilities using LLMs ✅'
-        );
-        readme = readme.replace(
-            /- \[ \] Custom node creation/g,
-            '- [x] Custom node creation ✅'
-        );
-        readme = readme.replace(
-            /- \[ \] Workflow marketplace/g,
-            '- [x] Automated workflow generation ✅'
-        );
+			readme =
+				readme.slice(0, insertIndex) + automationSection + '\n\n' + readme.slice(insertIndex);
+		} else {
+			// Add at the end if features section not found
+			readme += automationSection;
+		}
 
-        fs.writeFileSync('README.md', readme);
-        console.log('  ✅ README updated with automation features');
-    }
+		// Update automation status in existing sections
+		readme = readme.replace(
+			/- \[ \] Advanced AI capabilities using LLMs/g,
+			'- [x] Advanced AI capabilities using LLMs ✅',
+		);
+		readme = readme.replace(/- \[ \] Custom node creation/g, '- [x] Custom node creation ✅');
+		readme = readme.replace(
+			/- \[ \] Workflow marketplace/g,
+			'- [x] Automated workflow generation ✅',
+		);
+
+		fs.writeFileSync('README.md', readme);
+		console.log('  ✅ README updated with automation features');
+	}
 }
 
 // Run documentation generation if called directly
 if (require.main === module) {
-    const generator = new DocumentationGenerator();
-    generator.generateAllDocs().catch(error => {
-        console.error('Documentation generation error:', error);
-        process.exit(1);
-    });
+	const generator = new DocumentationGenerator();
+	generator.generateAllDocs().catch((error) => {
+		console.error('Documentation generation error:', error);
+		process.exit(1);
+	});
 }
 
 module.exports = DocumentationGenerator;

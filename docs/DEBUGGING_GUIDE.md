@@ -10,10 +10,10 @@ _Last updated: 2025-09-30_
 
 ## Roadmap
 
-| Phase | Focus | Deliverables |
-|-------|-------|--------------|
-| 1. Local Baseline | Get `server.js` debuggable on any machine. | VS Code launch configs, npm debug scripts, documentation (this file). |
-| 2. Workspace Expansion | Bring the same tooling to new packages/apps as they land. | Per-app launch configs, Turbo pipeline recipes, watch/debug scripts in each workspace. |
+| Phase                     | Focus                                                                                         | Deliverables                                                                                  |
+| ------------------------- | --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| 1. Local Baseline         | Get `server.js` debuggable on any machine.                                                    | VS Code launch configs, npm debug scripts, documentation (this file).                         |
+| 2. Workspace Expansion    | Bring the same tooling to new packages/apps as they land.                                     | Per-app launch configs, Turbo pipeline recipes, watch/debug scripts in each workspace.        |
 | 3. Cloud & CI Integration | Ensure Railway, GitHub Actions, and other environments expose debugger endpoints when needed. | Railway debug profile, GitHub Actions artifact collection, production-safe inspector toggles. |
 
 ## Local Debugging (Today)
@@ -26,11 +26,11 @@ _Last updated: 2025-09-30_
 
 ### npm Scripts
 
-| Script | Purpose |
-|--------|---------|
-| `npm start` | Run the Express server in production mode. |
-| `npm run start:debug` | Run the server with the Node inspector listening on `0.0.0.0:9229` (used inside Docker/CI). |
-| `npm run dev:server` | Development mode with `--watch` and inspector exposed on port `9229` for hot-reload debugging. |
+| Script                | Purpose                                                                                        |
+| --------------------- | ---------------------------------------------------------------------------------------------- |
+| `npm start`           | Run the Express server in production mode.                                                     |
+| `npm run start:debug` | Run the server with the Node inspector listening on `0.0.0.0:9229` (used inside Docker/CI).    |
+| `npm run dev:server`  | Development mode with `--watch` and inspector exposed on port `9229` for hot-reload debugging. |
 
 ### VS Code Configurations
 
@@ -78,12 +78,12 @@ When new apps/packages ship, follow these conventions:
 
 ## Troubleshooting
 
-| Symptom | Fix |
-|---------|-----|
-| Breakpoints never hit | Ensure you’re using the matching launch config and the inspector port isn’t in use. Restart VS Code if Auto Attach was previously enabled. |
-| Docker attach fails with `ECONNREFUSED` | Confirm `npm run start:debug` is running inside the container and port `9229` is exposed/bound. |
-| Source maps misaligned | Run with `--enable-source-maps` (already included in the launch profile) and rebuild if using transpiled TypeScript. |
-| Node warns about `--watch` | Requires Node ≥ 18.11; update your runtime to match the repo requirement (≥ 20). |
+| Symptom                                 | Fix                                                                                                                                        |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| Breakpoints never hit                   | Ensure you’re using the matching launch config and the inspector port isn’t in use. Restart VS Code if Auto Attach was previously enabled. |
+| Docker attach fails with `ECONNREFUSED` | Confirm `npm run start:debug` is running inside the container and port `9229` is exposed/bound.                                            |
+| Source maps misaligned                  | Run with `--enable-source-maps` (already included in the launch profile) and rebuild if using transpiled TypeScript.                       |
+| Node warns about `--watch`              | Requires Node ≥ 18.11; update your runtime to match the repo requirement (≥ 20).                                                           |
 
 ---
 

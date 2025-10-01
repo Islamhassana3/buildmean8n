@@ -22,8 +22,9 @@ npm run dev:docker
 ```
 
 **Services will be available at:**
+
 - Frontend: http://localhost:8080
-- n8n: http://localhost:5678  
+- n8n: http://localhost:5678
 - PostgreSQL: localhost:5432
 
 ### 2. Railway.app Production Deployment
@@ -38,8 +39,9 @@ npm run deploy:railway
 ```
 
 This deploys three connected services on Railway:
+
 - **n8n-workflow-builder**: Frontend application
-- **n8n**: Workflow execution engine  
+- **n8n**: Workflow execution engine
 - **postgres**: Database service
 
 ## Service Architecture
@@ -54,11 +56,13 @@ This deploys three connected services on Railway:
 ## Key Features
 
 ### Automatic Service Detection
+
 - **Real n8n Mode**: When n8n service is available, workflows execute on actual n8n
 - **Simulation Mode**: When n8n is unavailable, falls back to local simulation
 - **Seamless Transition**: No configuration changes needed
 
 ### Database Integration
+
 - PostgreSQL stores workflow definitions and execution history
 - Automatic schema initialization with custom tables
 - Connection pooling and health monitoring
@@ -73,6 +77,7 @@ This deploys three connected services on Railway:
 ## Environment Variables
 
 ### Required for Production
+
 ```bash
 N8N_API_URL=https://your-n8n-service-url
 DATABASE_URL=postgresql://user:password@host:5432/database
@@ -80,6 +85,7 @@ N8N_ENCRYPTION_KEY=your-secure-encryption-key
 ```
 
 ### Optional Configuration
+
 ```bash
 N8N_WEBHOOK_URL=https://your-webhook-url
 EXECUTIONS_DATA_SAVE_ON_SUCCESS=all
@@ -90,6 +96,7 @@ N8N_METRICS=true
 ## Troubleshooting
 
 ### Service Connection Issues
+
 ```bash
 # Check service health
 npm run health-check
@@ -100,6 +107,7 @@ docker-compose logs postgres
 ```
 
 ### Database Issues
+
 ```bash
 # Reset database (development only)
 docker-compose down -v
@@ -107,6 +115,7 @@ docker-compose up -d postgres
 ```
 
 ### n8n Service Issues
+
 ```bash
 # Restart n8n service
 docker-compose restart n8n
