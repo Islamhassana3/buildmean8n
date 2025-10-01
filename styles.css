@@ -7,11 +7,11 @@
 	--n8n-secondary: #666666;
 	--n8n-secondary-hover: #555555;
 
-	/* Background colors */
+	/* Background colors - n8n authentic palette */
 	--n8n-bg-primary: #ffffff;
-	--n8n-bg-secondary: #f9f9fb;
-	--n8n-bg-tertiary: #f0f0f5;
-	--n8n-bg-hover: #f5f5f7;
+	--n8n-bg-secondary: #F9FAFB; /* gray-50 - canvas background */
+	--n8n-bg-tertiary: #F3F4F6; /* gray-100 */
+	--n8n-bg-hover: #F5F5F7;
 	--n8n-bg-dark: #1a1a1a;
 	--n8n-bg-darker: #0f0f0f;
 
@@ -28,11 +28,11 @@
 	--n8n-border-hover: #ccc;
 	--n8n-border-focus: #ff6d5a;
 
-	/* Node colors */
-	--n8n-node-trigger: #22c55e;
-	--n8n-node-action: #3b82f6;
-	--n8n-node-logic: #f59e0b;
-	--n8n-node-transform: #a855f7;
+	/* Node colors - matching official n8n palette */
+	--n8n-node-trigger: #16A34A; /* green-600 - trigger nodes */
+	--n8n-node-action: #2563EB; /* blue-600 - action nodes */
+	--n8n-node-logic: #D97706; /* amber-600 - logic/flow nodes */
+	--n8n-node-transform: #9333EA; /* purple-600 - transform nodes */
 
 	/* Shadows - softer, more subtle */
 	--n8n-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
@@ -439,10 +439,10 @@ body {
 	width: 2000px;
 	height: 2000px;
 	background-color: var(--n8n-bg-secondary);
-	background-image: 
-		linear-gradient(var(--n8n-border-light) 1px, transparent 1px),
-		linear-gradient(90deg, var(--n8n-border-light) 1px, transparent 1px);
+	/* n8n-style dot pattern grid */
+	background-image: radial-gradient(circle, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
 	background-size: 20px 20px;
+	background-position: 0 0;
 	cursor: grab;
 	position: relative;
 	transform-origin: 0 0;
@@ -683,10 +683,11 @@ body {
 	position: absolute;
 	background-color: var(--n8n-bg-primary);
 	border: 2px solid var(--n8n-border-light);
-	border-radius: var(--n8n-radius-lg);
+	border-radius: var(--n8n-radius-lg); /* 8px - n8n standard */
 	box-shadow: var(--n8n-shadow-node);
 	cursor: move;
-	min-width: 200px;
+	min-width: 240px; /* Updated to n8n's min-width */
+	padding: 16px; /* n8n standard padding */
 	transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -701,25 +702,63 @@ body {
 	box-shadow: 0 0 0 3px rgba(255, 109, 90, 0.12), var(--n8n-shadow-node-hover);
 }
 
+/* Node type-specific colors - matching n8n's color coding */
+.workflow-node.trigger {
+	border-color: var(--n8n-node-trigger);
+}
+
+.workflow-node.trigger.selected {
+	border-color: var(--n8n-node-trigger);
+	box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.12), var(--n8n-shadow-node-hover);
+}
+
+.workflow-node.action {
+	border-color: var(--n8n-node-action);
+}
+
+.workflow-node.action.selected {
+	border-color: var(--n8n-node-action);
+	box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12), var(--n8n-shadow-node-hover);
+}
+
+.workflow-node.logic {
+	border-color: var(--n8n-node-logic);
+}
+
+.workflow-node.logic.selected {
+	border-color: var(--n8n-node-logic);
+	box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.12), var(--n8n-shadow-node-hover);
+}
+
+.workflow-node.transform {
+	border-color: var(--n8n-node-transform);
+}
+
+.workflow-node.transform.selected {
+	border-color: var(--n8n-node-transform);
+	box-shadow: 0 0 0 3px rgba(147, 51, 234, 0.12), var(--n8n-shadow-node-hover);
+}
+
 .workflow-node .node-header {
 	display: flex;
 	align-items: center;
-	gap: var(--n8n-space-3);
-	padding: var(--n8n-space-3) var(--n8n-space-4);
-	border-bottom: 1px solid var(--n8n-border-light);
-	background: linear-gradient(180deg, var(--n8n-bg-primary) 0%, var(--n8n-bg-secondary) 100%);
-	border-radius: var(--n8n-radius-lg) var(--n8n-radius-lg) 0 0;
+	gap: 12px; /* n8n spacing between icon and title */
+	padding: 0; /* Remove padding - node already has it */
+	margin-bottom: 8px;
+	border-bottom: none; /* Simplified like n8n */
+	background: transparent;
 }
 
 .workflow-node .node-icon {
-	width: 26px;
-	height: 26px;
-	border-radius: var(--n8n-radius-sm);
+	width: 32px; /* Larger icon like n8n */
+	height: 32px;
+	border-radius: var(--n8n-radius); /* 6px */
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	flex-shrink: 0;
-	font-size: 16px;
+	font-size: 18px;
+	background-color: var(--n8n-bg-tertiary); /* Subtle background */
 }
 
 .workflow-node .node-icon img {
@@ -729,15 +768,17 @@ body {
 }
 
 .workflow-node .node-title {
-	font-size: var(--n8n-font-sm);
-	font-weight: var(--n8n-font-semibold);
+	font-size: 0.9375rem; /* 15px - n8n's node title size */
+	font-weight: var(--n8n-font-semibold); /* 600 */
 	color: var(--n8n-text-primary);
 	flex: 1;
+	line-height: 1.3;
 }
 
 .workflow-node .node-description {
-	padding: var(--n8n-space-3) var(--n8n-space-4);
-	font-size: var(--n8n-font-xs);
+	padding: 0; /* Node already has padding */
+	margin-top: 4px;
+	font-size: var(--n8n-font-xs); /* 0.75rem / 12px */
 	color: var(--n8n-text-secondary);
 	line-height: 1.4;
 }
@@ -826,17 +867,31 @@ body {
 }
 
 .connection-line {
-	stroke: var(--n8n-text-tertiary);
+	stroke: #999999; /* Lighter gray like n8n */
 	stroke-width: 2;
 	fill: none;
 	pointer-events: auto;
 	cursor: pointer;
 	transition: all 0.2s ease;
+	stroke-linecap: round;
 }
 
 .connection-line:hover {
 	stroke: var(--n8n-primary);
 	stroke-width: 2.5;
+}
+
+/* Active/drawing connection */
+.connection-line.active {
+	stroke: var(--n8n-primary);
+	stroke-dasharray: 5, 5;
+	animation: dash 0.5s linear infinite;
+}
+
+@keyframes dash {
+	to {
+		stroke-dashoffset: -10;
+	}
 }
 
 /* Responsive Design */

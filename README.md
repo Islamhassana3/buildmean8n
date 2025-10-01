@@ -65,11 +65,14 @@ _The AI assistant automatically creates complex workflows from natural language 
 - **Smart Suggestions**: Get contextual suggestions for common workflow patterns
 - **Interactive Assistance**: Ask questions and get help building complex automations
 
-### 🎨 Visual Workflow Editor
+### 🎨 Visual Workflow Editor (n8n Design System)
 
+- **Authentic n8n Styling**: Maximum visual consistency with official n8n platform
+- **Color-Coded Nodes**: Type-specific borders (green for triggers, blue for actions, amber for logic, purple for transform)
 - **Drag & Drop**: Intuitive drag-and-drop interface for building workflows
 - **Rich Node Library**: Pre-built nodes for triggers, actions, logic, and transformations
 - **Visual Connections**: Connect nodes with animated connection lines
+- **n8n Canvas**: Dot-pattern grid background matching n8n's design
 - **Zoom & Pan**: Navigate large workflows with zoom and pan controls
 
 ### 🔧 Comprehensive Node Types
@@ -379,11 +382,23 @@ Contributions are welcome! Here's how you can help:
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
+## 🎨 Design System
+
+BuildMean8n implements the official [n8n design system](https://github.com/n8n-io/n8n) for maximum visual consistency:
+
+- **Color Palette**: Exact n8n colors (`#FF6D5A` primary, type-specific node colors)
+- **Typography**: Inter font with n8n's font scale and weights
+- **Components**: Node styling, canvas grid, and UI elements match n8n
+- **Spacing & Shadows**: Consistent with n8n's design tokens
+
+See [docs/N8N_DESIGN_REFERENCES.md](docs/N8N_DESIGN_REFERENCES.md) for detailed design documentation.
+
 ## 🙏 Acknowledgments
 
-- Inspired by [n8n](https://n8n.io/) - the workflow automation platform
+- Design system from [n8n](https://n8n.io/) - the open-source workflow automation platform
+- Color palette and component styling reference: [n8n GitHub](https://github.com/n8n-io/n8n)
 - Icons from Bootstrap Icons
-- Modern UI principles from various design systems
+- Modern UI principles from n8n's design-system package
 
 ## 📧 Contact
 
