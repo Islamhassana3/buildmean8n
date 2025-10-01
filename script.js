@@ -398,7 +398,8 @@ function deleteNode(nodeId) {
     }
     
     // Redraw canvas
-    drawCanvas();
+    updateConnections();
+    updateCanvasInfo();
     
     showNotification('Node deleted', 'info');
 }
@@ -415,7 +416,8 @@ function clearWorkflow() {
         canvasApp._instance.data.selectedNodeId = null;
     }
     
-    drawCanvas();
+    updateConnections();
+    updateCanvasInfo();
     showNotification('Workflow cleared', 'info');
 }
 
@@ -487,6 +489,18 @@ function duplicateNode(nodeId) {
 }
 
 function showNotification(message, type = 'info') {
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.textContent = message;
+    notification.style.cssText = 'position: fixed; top: 20px; right: 20px; background: var(--n8n-primary); color: white; padding: 12px 20px; border-radius: 6px; z-index: 10000; box-shadow: 0 4px 12px rgba(0,0,0,0.15);';
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.remove();
+    }, 3000);
+}
 
 // Drag and Drop Setup
 function setupDragAndDrop() {
