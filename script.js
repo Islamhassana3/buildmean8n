@@ -179,6 +179,8 @@ function init() {
     setupDragAndDrop();
     setupTabSwitching();
     updateCanvasInfo();
+    // Set up node filters after everything else is initialized
+    setupNodeFilters();
 }
 
 // Event Listeners Setup
@@ -229,9 +231,6 @@ function setupEventListeners() {
     // Node search
     document.getElementById('nodeSearch').addEventListener('input', handleNodeSearch);
     
-    // Node filter buttons
-    setupNodeFilters();
-    
     // Connection point clicks (delegate to canvas)
     elements.canvas.addEventListener('click', handleConnectionPointClick);
     
@@ -240,12 +239,21 @@ function setupEventListeners() {
 }
 
 // Node Filter Functionality
-function setupNodeFilters() {
+window.setupNodeFilters = function setupNodeFilters() {
     const filterButtons = document.querySelectorAll('.n8n-filter-btn');
     const nodeItems = document.querySelectorAll('.n8n-node-item');
     
+    console.log('Setting up filters - Buttons:', filterButtons.length, 'Nodes:', nodeItems.length);
+    
+    if (filterButtons.length === 0 || nodeItems.length === 0) {
+        console.error('Filter buttons or nodes not found!');
+        return;
+    }
+    
     filterButtons.forEach(button => {
         button.addEventListener('click', () => {
+            console.log('Filter clicked:', button.dataset.filter);
+            
             // Update active state
             filterButtons.forEach(btn => btn.classList.remove('active'));
             button.classList.add('active');
@@ -272,7 +280,12 @@ function setupNodeFilters() {
             });
         });
     });
-}
+    
+    // Set initial state - show all nodes
+    nodeItems.forEach(node => {
+        node.style.display = 'flex';
+    });
+};
 
 // Tab Switching
 function setupTabSwitching() {
@@ -344,20 +357,6 @@ function handleKeyboardShortcuts(e) {
     }
 }
 
-function handleConnectionPointClick(e) {
-    const connectionPoint = e.target.closest('.connection-point');
-    if (connectionPoint) {
-        e.stopPropagation();
-        const nodeId = parseInt(connectionPoint.getAttribute('data-node-id'));
-        const pointType = connectionPoint.getAttribute('data-point-type');
-        
-        if (state.isConnecting) {
-            completeConnection(nodeId, pointType);
-        } else {
-            startConnection(nodeId, pointType);
-        }
-    }
-}
 
 // Workflow Management Functions
 function saveWorkflow() {
