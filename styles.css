@@ -867,17 +867,31 @@ body {
 }
 
 .connection-line {
-	stroke: var(--n8n-text-tertiary);
+	stroke: #999999; /* Lighter gray like n8n */
 	stroke-width: 2;
 	fill: none;
 	pointer-events: auto;
 	cursor: pointer;
 	transition: all 0.2s ease;
+	stroke-linecap: round;
 }
 
 .connection-line:hover {
 	stroke: var(--n8n-primary);
 	stroke-width: 2.5;
+}
+
+/* Active/drawing connection */
+.connection-line.active {
+	stroke: var(--n8n-primary);
+	stroke-dasharray: 5, 5;
+	animation: dash 0.5s linear infinite;
+}
+
+@keyframes dash {
+	to {
+		stroke-dashoffset: -10;
+	}
 }
 
 /* Responsive Design */

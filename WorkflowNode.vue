@@ -120,117 +120,160 @@ export default {
 <style scoped>
 .workflow-node {
   position: absolute;
-  background: var(--surface-elevated);
-  border: 2px solid var(--border);
-  border-radius: 0.5rem;
-  padding: 0.75rem;
-  min-width: 180px;
+  background-color: #ffffff;
+  border: 2px solid #e6e6e6;
+  border-radius: 8px; /* n8n standard 8px */
+  padding: 16px; /* n8n standard padding */
+  min-width: 240px; /* Updated to n8n's min-width */
   cursor: move;
-  box-shadow: var(--shadow);
-  transition: var(--transition-fast);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .workflow-node:hover {
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  border-color: #ddd;
+  transform: translateY(-1px);
 }
 
 .workflow-node.selected {
-  border-color: var(--primary-color);
-  box-shadow: var(--shadow-glow);
+  border-color: #ff6d5a;
+  box-shadow: 0 0 0 3px rgba(255, 109, 90, 0.12), 0 4px 16px rgba(0, 0, 0, 0.15);
 }
 
+/* Node type-specific colors - matching n8n's color coding */
 .workflow-node.trigger {
-  border-color: #10B981;
+  border-color: #16A34A; /* green-600 */
+}
+
+.workflow-node.trigger.selected {
+  border-color: #16A34A;
+  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.12), 0 4px 16px rgba(0, 0, 0, 0.15);
 }
 
 .workflow-node.action {
-  border-color: var(--primary-color);
+  border-color: #2563EB; /* blue-600 */
+}
+
+.workflow-node.action.selected {
+  border-color: #2563EB;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12), 0 4px 16px rgba(0, 0, 0, 0.15);
 }
 
 .workflow-node.logic {
-  border-color: #F59E0B;
+  border-color: #D97706; /* amber-600 */
+}
+
+.workflow-node.logic.selected {
+  border-color: #D97706;
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.12), 0 4px 16px rgba(0, 0, 0, 0.15);
 }
 
 .workflow-node.transform {
-  border-color: #8B5CF6;
+  border-color: #9333EA; /* purple-600 */
+}
+
+.workflow-node.transform.selected {
+  border-color: #9333EA;
+  box-shadow: 0 0 0 3px rgba(147, 51, 234, 0.12), 0 4px 16px rgba(0, 0, 0, 0.15);
 }
 
 .node-header {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.5rem;
+  gap: 12px; /* n8n spacing between icon and title */
+  margin-bottom: 8px;
 }
 
 .node-icon {
-  font-size: 1.25rem;
-  width: 2rem;
-  height: 2rem;
+  font-size: 18px;
+  width: 32px; /* Larger icon like n8n */
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--gradient-primary);
-  border-radius: 0.375rem;
+  background-color: #F3F4F6; /* Subtle background */
+  border-radius: 6px;
 }
 
 .node-title {
+  font-size: 0.9375rem; /* 15px - n8n's node title size */
   font-weight: 600;
-  color: var(--text-primary);
+  color: #333333;
+  flex: 1;
+  line-height: 1.3;
 }
 
 .node-description {
-  font-size: 0.75rem;
-  color: var(--text-secondary);
-  margin-bottom: 0.5rem;
+  font-size: 0.75rem; /* 12px */
+  color: #666666;
+  margin-top: 4px;
+  line-height: 1.4;
 }
 
 .node-controls {
+  position: absolute;
+  top: 8px;
+  right: 8px;
   display: flex;
-  gap: 0.25rem;
-  margin-top: 0.5rem;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.workflow-node:hover .node-controls {
+  opacity: 1;
 }
 
 .node-controls button {
+  width: 20px;
+  height: 20px;
   background: none;
   border: none;
   cursor: pointer;
-  padding: 0.25rem;
-  border-radius: 0.25rem;
-  color: var(--text-secondary);
-  transition: var(--transition-fast);
+  padding: 0;
+  border-radius: 6px;
+  color: #666666;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
 }
 
 .node-controls button:hover {
-  background: var(--surface-hover);
-  color: var(--text-primary);
+  background-color: #F3F4F6;
+  color: #333333;
 }
 
 .connection-point {
   position: absolute;
-  width: 12px;
-  height: 12px;
-  background: var(--surface);
-  border: 2px solid var(--primary-color);
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
+  background-color: #ffffff;
+  border: 2px solid #999999;
   cursor: crosshair;
-  z-index: 20;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 10;
 }
 
 .connection-point.input {
-  left: -6px;
+  left: -7px;
   top: 50%;
   transform: translateY(-50%);
 }
 
 .connection-point.output {
-  right: -6px;
+  right: -7px;
   top: 50%;
   transform: translateY(-50%);
 }
 
 .connection-point:hover {
-  background: var(--primary-color);
+  border-color: #ff6d5a;
+  border-width: 3px;
   transform: translateY(-50%) scale(1.3);
+  box-shadow: 0 0 0 4px rgba(255, 109, 90, 0.15);
 }
 
 .connection-point.input:hover {
