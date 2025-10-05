@@ -4,6 +4,39 @@ A powerful, intuitive workflow builder and editor with natural language capabili
 
 > **Repository status (Sep 2025):** The project is currently migrating into a TypeScript-first npm workspace. Daily Git workflows—branching, committing, and pushing—still work exactly the same. See [`docs/CONTRIBUTOR_GUIDE.md`](docs/CONTRIBUTOR_GUIDE.md) for up-to-date contributor instructions while the new `apps/*` and `packages/*` scaffolds land.
 
+## 🚀 Quick Preview
+
+[![Preview App](https://img.shields.io/badge/Preview-localhost%3A3000-blue?style=for-the-badge&logo=googlechrome)](http://localhost:3000)
+[![Launch Guide](https://img.shields.io/badge/Launch-Guide-green?style=for-the-badge&logo=rocket)](https://github.com/Islamhassana3/buildmean8n#-getting-started)
+
+**Launch the app instantly with one command:**
+
+### 🐧 Linux/macOS
+```bash
+./preview.sh
+```
+
+### 🪟 Windows (PowerShell)
+```powershell
+.\preview.ps1
+```
+
+### 🪟 Windows (Command Prompt)
+```cmd
+preview.bat
+```
+
+### ⚡ Quick Manual Start
+```bash
+npm install && npm start
+# Then open http://localhost:3000
+```
+
+The preview scripts will automatically:
+- ✅ Check and install dependencies if needed
+- ✅ Start the development server on port 3000
+- ✅ Open the app in your default browser
+
 ## 🌟 Features
 
 #
