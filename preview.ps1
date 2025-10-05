@@ -31,28 +31,41 @@ if (-Not (Test-Path "node_modules")) {
 }
 
 # Start the server
-Write-Host "🔄 Starting development server on port 3000..." -ForegroundColor Cyan
+Write-Host "🔄 Starting development server (finding available port)..." -ForegroundColor Cyan
 $serverJob = Start-Job -ScriptBlock {
     Set-Location $using:PWD
     npm start
 }
 
-# Wait for server to start
+# Wait for server to start and extract port
 Write-Host "⏳ Waiting for server to start..." -ForegroundColor Yellow
-Start-Sleep -Seconds 3
+$port = 3000
+$maxWait = 30
+for ($i = 0; $i -lt $maxWait; $i++) {
+    Start-Sleep -Milliseconds 500
+    $output = Receive-Job -Job $serverJob -ErrorAction SilentlyContinue
+    if ($output -match "Server running on port (\d+)") {
+        $port = $matches[1]
+        break
+    }
+}
 
 # Open browser
 Write-Host "🌐 Opening browser..." -ForegroundColor Cyan
-Start-Process "http://localhost:3000"
+Start-Process "http://localhost:$port"
 
 Write-Host ""
-Write-Host "✅ Build Mean8n is running at http://localhost:3000" -ForegroundColor Green
+Write-Host "✅ Build Mean8n is running at http://localhost:$port" -ForegroundColor Green
 Write-Host "📝 Press Ctrl+C to stop the server" -ForegroundColor Yellow
 Write-Host ""
 
 # Keep script running and monitor job
 try {
     while ($serverJob.State -eq 'Running') {
+        $output = Receive-Job -Job $serverJob -ErrorAction SilentlyContinue
+        if ($output) {
+            Write-Host $output
+        }
         Start-Sleep -Seconds 1
     }
 } finally {
